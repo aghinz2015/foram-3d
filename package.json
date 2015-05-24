@@ -1,0 +1,41 @@
+{
+  "name": "Foram3D",
+  "version": "1.0.0",
+  "description": "Foram 3D visualisation tool",
+  "main": "./dist/foram3d.js",
+  "scripts": {
+    "test": "istanbul test --report html -x 'vendor/**' _mocha",
+    "test-travis": "istanbul cover -x 'vendor/**' _mocha -- -R spec;A=$?;cat coverage/lcov.info | coveralls;exit $A"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bzurkowski/foram-3d"
+  },
+  "author": "Bartosz Żurkowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bzurkowski/foram-3d/issues"
+  },
+  "homepage": "https://github.com/bzurkowski/foram-3d",
+  "devDependencies": {
+    "coffee-script": "~1",
+    "mocha": "*",
+    "chai": "*",
+    "istanbul": "*",
+    "gulp": "~3",
+    "gulp-util": "~2",
+    "coveralls": "~2",
+    "gulp-uglify": "~0",
+    "webpack": "~1",
+    "gulp-watch": "~0",
+    "gulp-plumber": "~0",
+    "through2": "~0",
+    "gulp-rename": "~1",
+    "coffee-loader": "~0",
+    "gulp-mocha": "~0.4.1"
+  },
+  "engines": {
+    "node": ">=0.10",
+    "npm": ">=1.2.10"
+  }
+}
