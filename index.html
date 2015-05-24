@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Foram 3D Visualisation tool</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script src="./libs/three.min.js" type="text/javascript"></script>
+    <script src="./dist/foram3d.js" type="text/javascript"></script>
+  </head>
+
+  <body>
+    <div id="container">Your browser doesn't support WebGL or it doesn't have it enabled. To get WebGL visit <a href="http://get.webgl.org">www.get.webgl.org</a></div>
+  </body>
+</html>
+
+<script type="text/javascript">
+  Object.prototype.getName = function() {
+    var funcNameRegex = /function (.{1,})\(/;
+    var results = (funcNameRegex).exec((this).constructor.toString());
+    return (results && results.length > 1) ? results[1] : "";
+  };
+
+  window.app = new Foram3D();
+
+  // window.animate();
+</script>
