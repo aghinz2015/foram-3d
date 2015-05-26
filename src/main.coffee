@@ -29,13 +29,27 @@ class Foram3D
     @scene.add(@cube)
 
   setupControls: ()->
-    return
+  	@controls = new THREE.TrackballControls(@camera)
+
+  	@controls.rotateSpeed = 5.0
+  	@controls.zoomSpeed   = 1.2
+  	@controls.panSpeed    = 0.8
+
+  	@controls.noZoom = false
+  	@controls.noPan  = false
+
+  	@controls.staticMoving = true
+
+  	@controls.dynamicDampingFactor = 0.3
+
+  	@controls.keys = [65, 83, 68]
 
   animate: =>
     requestAnimationFrame @animate
 
     @cube.rotation.y += 0.005
 
+    @controls.update()
     @render()
 
   render: ()->
