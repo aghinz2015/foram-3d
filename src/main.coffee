@@ -134,17 +134,14 @@ class Foram extends THREE.Object3D
       @chambers.push newChamber
 
   build: ->
-    for chamber in @chambers
-      console.log chamber.position
-
     @.add chamber for chamber in @chambers
 
 class Simulation
 
-  constructor: (@genotype, @canvas)->
+  constructor: (@canvas)->
     @setupScene()
     @setupControls()
-    @simulate()
+    @setupGUI()
 
   setupScene: ()->
     @scene = new THREE.Scene()
@@ -169,7 +166,7 @@ class Simulation
     @canvas.append @renderer.domElement
 
   setupControls: ()->
-  	@controls = new THREE.TrackballControls @camera
+  	@controls = new THREE.TrackballControls @camera, @renderer.domElement
 
   	@controls.rotateSpeed = 5.0
   	@controls.zoomSpeed   = 1.2
@@ -184,14 +181,33 @@ class Simulation
 
   	@controls.keys = [65, 83, 68]
 
-  simulate: ->
-    foram = new Foram @genotype
-    foram.calculate()
+  setupGUI: ->
+    @gui = new dat.GUI
 
-    @scene.add foram
+    genotype =
+      phi:               0.5
+      translationFactor: 0.5
+      growthFactor:      1
+      simulate:          => @simulate(genotype)
+
+    @gui.add(genotype, 'phi')
+    @gui.add(genotype, 'translationFactor')
+    @gui.add(genotype, 'growthFactor')
+    @gui.add(genotype, 'simulate')
+
+  simulate: (genotype)->
+    @scene.remove @foram if @foram
+
+    @foram = foram = new Foram(genotype)
+    @foram.calculate()
+
+    @scene.add @foram
 
   animate: =>
     requestAnimationFrame @animate
+
+    if @foram
+      @foram.rotation.y += 0.01
 
     @controls.update()
     @render()
