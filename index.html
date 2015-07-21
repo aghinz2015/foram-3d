@@ -25,7 +25,13 @@
     return (results && results.length > 1) ? results[1] : "";
   };
 
-  var app = new Foram3D($('#container'));
+  var genotype = {
+    phi: 0.5,
+    translationFactor: 0.5,
+    growthFactor: 1
+  };
+
+  var app = new Simulation(genotype, $('#container'));
   app.animate();
 
   // window.animate();

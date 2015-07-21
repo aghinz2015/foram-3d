@@ -8,7 +8,7 @@ module.exports = {
     output: {
         path: "./dist/",
         filename: "foram3d.js",
-        library: "Foram3D",
+        library: "Simulation",
         libraryTarget: "umd"
     },
     watch: true,
