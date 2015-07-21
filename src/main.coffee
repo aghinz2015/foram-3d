@@ -15,7 +15,7 @@ class Chamber extends THREE.Mesh
     geometry = new THREE.SphereGeometry @radius, 32, 32
     geometry.applyMatrix originTranslationMatrix
 
-    material = new THREE.MeshLambertMaterial { color: 'gray' }
+    material = new THREE.MeshLambertMaterial { color: 0xffffff }
 
     THREE.Mesh.call @, geometry, material
 
@@ -152,27 +152,24 @@ class Simulation
     # camera
 
     @camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000)
-    @camera.position.z = 80
-    @scene.add(@camera)
+    @camera.position.set 0, 0, 70
+    @scene.add @camera
 
     # renderer
 
-    @renderer = new THREE.WebGLRenderer({ alpha: true })
-    @renderer.setSize(window.innerWidth, window.innerHeight)
+    @renderer = new THREE.WebGLRenderer { alpha: true, antialias: true }
+    @renderer.setClearColor 0x111111, 1
+    @renderer.setSize window.innerWidth, window.innerHeight
 
     # lighting
 
-    light = new THREE.AmbientLight(0x000044)
-    @scene.add(light)
+    spotLight = new THREE.SpotLight 0xffffff
+    @camera.add spotLight
 
-    light = new THREE.DirectionalLight(0xffffff)
-    light.position.set(1, 1, 1).normalize()
-    @scene.add(light)
-
-    @canvas.append(@renderer.domElement)
+    @canvas.append @renderer.domElement
 
   setupControls: ()->
-  	@controls = new THREE.TrackballControls(@camera)
+  	@controls = new THREE.TrackballControls @camera
 
   	@controls.rotateSpeed = 5.0
   	@controls.zoomSpeed   = 1.2
@@ -188,7 +185,7 @@ class Simulation
   	@controls.keys = [65, 83, 68]
 
   simulate: ->
-    foram = new Foram(@genotype)
+    foram = new Foram @genotype
     foram.calculate()
 
     @scene.add foram
