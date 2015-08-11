@@ -6,10 +6,9 @@
 #   | __ |
 #   |____|
 
-
 class Chamber extends THREE.Mesh
 
-  constructor: (@radius, @origin)->
+  constructor: (@origin, @radius) ->
     originTranslationMatrix = new THREE.Matrix4().makeTranslation @origin.x, @origin.y, @origin.z
 
     geometry = new THREE.SphereGeometry @radius, 32, 32
@@ -19,13 +18,14 @@ class Chamber extends THREE.Mesh
 
     THREE.Mesh.call @, geometry, material
 
+    @vertices = @calculateGeometryRing()
     @aperture = @calculateAperture()
 
   calculateAperture: ->
-    aperture = @.geometry.vertices[0]
+    aperture = @vertices[0]
     currentDistance = aperture.distanceTo @origin
 
-    for vertex in @.geometry.vertices[1..-1]
+    for vertex in @vertices[1..-1]
       newDistance = vertex.distanceTo @origin
 
       if newDistance < currentDistance
@@ -34,35 +34,25 @@ class Chamber extends THREE.Mesh
 
     aperture
 
-  calculateCentroid: ->
-    centroid = new THREE.Vector3
+  setAperture: (aperture) ->
+    @aperture = aperture
 
-    centroid.add vertex for vertex in @.geometry.vertices
-    centroid.divideScalar @.geometry.vertices.length
-
-  contains: (vertex)->
-    for thisVertex in @.geometry.vertices
-      if 0 < thisVertex.distanceTo vertex < @radius
-        return true
-    return false
+  calculateGeometryRing: ->
+    vertex for vertex in @.geometry.vertices when vertex.z == 0
 
 class Foram extends THREE.Object3D
 
-  DEFAULT_CHAMBERS_COUNT: 7
-  INITIAL_CHAMBER_RADIUS: 5
-
-  constructor: (@genotype)->
-    @chambers = [new Chamber(@INITIAL_CHAMBER_RADIUS, new THREE.Vector3(0, 0, 0))]
-
+  constructor: (@genotype) ->
     THREE.Object3D.call @
 
-  calculate: (num_chambers = @DEFAULT_CHAMBERS_COUNT)->
-    @calculateChambers num_chambers
-    @build()
+    @chambers = [@buildInitialChamber()]
 
-  calculateChambers: (num_chambers)->
-    for i in [0..num_chambers - 1]
-      # fetch current chamber origin and aperture
+  buildInitialChamber: ->
+    new Chamber(new THREE.Vector3(0, 0, 0), 5)
+
+  calculateChambers: (numChambers) ->
+    for i in [0..numChambers - 2]
+      # fetch origin and aperture of current chamber
 
       currentOrigin = if i > 0
                         @chambers[i - 1].aperture
@@ -71,55 +61,45 @@ class Foram extends THREE.Object3D
 
       currentAperture = @chambers[i].aperture
 
-      # calculate reference line
+      # calculate initial growth vector (reference line)
 
-      referenceLine = new THREE.Vector3
-      referenceLine.subVectors currentAperture, currentOrigin
+      growthVector = new THREE.Vector3
+      growthVector.subVectors currentAperture, currentOrigin
 
       # deviate growth vector from reference line
 
       rotationAxis = new THREE.Vector3 0, 0, 1
 
-      growthVector = new THREE.Vector3
-      growthVector.copy referenceLine
-      growthVector.applyAxisAngle rotationAxis, @genotype["phi"]
+      growthVector.applyAxisAngle rotationAxis, 20
 
-      # multiply growth vector by translation factor
+      # multiply growth vector by translaction factor
 
       growthVector.normalize()
-      growthVector.multiplyScalar @genotype["translationFactor"]
+      growthVector.multiplyScalar 1.2
 
-      # calculate new chamber origin
+      # calculate origin of new chamber
 
       newOrigin = new THREE.Vector3
       newOrigin.copy currentAperture
       newOrigin.add growthVector
 
-      # calculate new chamber radius
-
-      prevChamber = if i > 0 then @chambers[i - 1] else @chambers[i]
-
-      newRadius = prevChamber.radius * @genotype["growthFactor"]
-
       # build new chamber
 
-      newChamber = new Chamber newRadius, newOrigin
+      newChamber = new Chamber newOrigin, 5
 
-      # calculate new chamber aperture
+      # calculate aperture of new chamber
 
-      newChamberVertices = newChamber.geometry.vertices
-
-      newAperture = newChamberVertices[0]
+      newAperture = newChamber.vertices[0]
       currentDistance = newAperture.distanceTo newOrigin
 
-      for vertex in newChamberVertices[1..-1]
+      for vertex in newChamber.vertices[1..-1]
         newDistance = vertex.distanceTo newOrigin
 
         if newDistance < currentDistance
           contains = false
 
           for chamber in @chambers
-            if chamber.contains vertex
+            if chamber.radius > newAperture.distanceTo chamber.origin
               contains = true
               break
 
@@ -127,23 +107,22 @@ class Foram extends THREE.Object3D
             newAperture = vertex
             currentDistance = newDistance
 
-      newChamber.aperture = newAperture
+      newChamber.setAperture newAperture
 
       # add new chamber to foram
 
       @chambers.push newChamber
 
-  build: ->
     @.add chamber for chamber in @chambers
 
 class Simulation
 
-  constructor: (@canvas)->
+  constructor: (@canvas) ->
     @setupScene()
     @setupControls()
-    @setupGUI()
+    @buildForam()
 
-  setupScene: ()->
+  setupScene: ->
     @scene = new THREE.Scene()
 
     # camera
@@ -165,7 +144,7 @@ class Simulation
 
     @canvas.append @renderer.domElement
 
-  setupControls: ()->
+  setupControls: ->
   	@controls = new THREE.TrackballControls @camera, @renderer.domElement
 
   	@controls.rotateSpeed = 5.0
@@ -181,33 +160,13 @@ class Simulation
 
   	@controls.keys = [65, 83, 68]
 
-  setupGUI: ->
-    @gui = new dat.GUI
-
-    genotype =
-      phi:               0.5
-      translationFactor: 0.5
-      growthFactor:      1
-      simulate:          => @simulate(genotype)
-
-    @gui.add(genotype, 'phi')
-    @gui.add(genotype, 'translationFactor')
-    @gui.add(genotype, 'growthFactor')
-    @gui.add(genotype, 'simulate')
-
-  simulate: (genotype)->
-    @scene.remove @foram if @foram
-
-    @foram = foram = new Foram(genotype)
-    @foram.calculate()
-
+  buildForam: ->
+    @foram = new Foram {}
+    @foram.calculateChambers 10
     @scene.add @foram
 
   animate: =>
     requestAnimationFrame @animate
-
-    if @foram
-      @foram.rotation.y += 0.01
 
     @controls.update()
     @render()
