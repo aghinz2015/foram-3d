@@ -29,13 +29,13 @@ class Chamber extends THREE.Mesh
     geometry.applyMatrix centerTranslationMatrix
     geometry
 
-  buildCenterTranslationMatrix: ->
-    new THREE.Matrix4().makeTranslation @center.x, @center.y, @center.z
-
   buildChamberMaterial: ->
     texture = THREE.ImageUtils.loadTexture @DEFAULT_TEXTURE
 
     new THREE.MeshLambertMaterial { color: 0xffffff, map: texture }
+
+  buildCenterTranslationMatrix: ->
+    new THREE.Matrix4().makeTranslation @center.x, @center.y, @center.z
 
   calculateAperture: ->
     aperture = @vertices[0]
@@ -73,7 +73,7 @@ class Foram extends THREE.Object3D
   buildInitialChamber: ->
     new Chamber(new THREE.Vector3(0, 0, 0), 5)
 
-  calculateChambers: (numChambers) ->
+  buildChambers: (numChambers) ->
     @evolve() for i in [1..numChambers-1]
     @build()
 
@@ -93,8 +93,6 @@ class Foram extends THREE.Object3D
     @currentChamber = newChamber
 
   calculateNewCenter: ->
-    # fetch origin and aperture of current chamber
-
     currentOrigin   = @currentChamber.origin
     currentAperture = @currentChamber.aperture
 
@@ -108,13 +106,13 @@ class Foram extends THREE.Object3D
     horizontalRotationAxis = new THREE.Vector3 0, 0, 1
     verticalRotationAxis   = new THREE.Vector3 1, 0, 0
 
-    growthVector.applyAxisAngle horizontalRotationAxis, 1.5
-    growthVector.applyAxisAngle verticalRotationAxis, 0.75
+    growthVector.applyAxisAngle horizontalRotationAxis, @genotype.phi
+    growthVector.applyAxisAngle verticalRotationAxis,   @genotype.beta
 
     # multiply growth vector by translaction factor
 
     growthVector.normalize()
-    growthVector.multiplyScalar 1.5
+    growthVector.multiplyScalar @genotype.translationFactor
 
     # calculate center of new chamber
 
@@ -125,7 +123,7 @@ class Foram extends THREE.Object3D
     newCenter
 
   calculateNewRadius: ->
-    @currentChamber.parent.radius * 1.1
+    @currentChamber.parent.radius * @genotype.growthFactor
 
   calculateNewAperture: (newChamber) ->
     newCenter   = newChamber.center
@@ -158,7 +156,7 @@ class Simulation
   constructor: (@canvas) ->
     @setupScene()
     @setupControls()
-    @buildForam()
+    @setupGUI()
 
   setupScene: ->
     @scene = new THREE.Scene()
@@ -198,9 +196,30 @@ class Simulation
 
   	@controls.keys = [65, 83, 68]
 
-  buildForam: ->
-    @foram = new Foram {}
-    @foram.calculateChambers 10
+  setupGUI: ->
+    @gui = new dat.GUI
+
+    genotype =
+      phi:               0.5
+      beta:              0.5
+      translationFactor: 0.5
+      growthFactor:      1.1
+      numChambers:       7
+      simulate:          => @simulate(genotype)
+
+    @gui.add(genotype, 'phi')
+    @gui.add(genotype, 'beta')
+    @gui.add(genotype, 'translationFactor')
+    @gui.add(genotype, 'growthFactor')
+    @gui.add(genotype, 'numChambers')
+    @gui.add(genotype, 'simulate')
+
+  simulate: (genotype) ->
+    @scene.remove @foram if @foram
+
+    @foram = new Foram genotype
+    @foram.buildChambers genotype.numChambers
+
     @scene.add @foram
 
   animate: =>
