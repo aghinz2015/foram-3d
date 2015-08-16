@@ -181,20 +181,20 @@ class Simulation
     @canvas.append @renderer.domElement
 
   setupControls: ->
-  	@controls = new THREE.TrackballControls @camera, @renderer.domElement
+    @controls = new THREE.TrackballControls @camera, @renderer.domElement
 
-  	@controls.rotateSpeed = 5.0
-  	@controls.zoomSpeed   = 1.2
-  	@controls.panSpeed    = 0.8
+    @controls.rotateSpeed = 5.0
+    @controls.zoomSpeed   = 1.2
+    @controls.panSpeed    = 0.8
 
-  	@controls.noZoom = false
-  	@controls.noPan  = false
+    @controls.noZoom = false
+    @controls.noPan  = false
 
-  	@controls.staticMoving = true
+    @controls.staticMoving = true
 
-  	@controls.dynamicDampingFactor = 0.3
+    @controls.dynamicDampingFactor = 0.3
 
-  	@controls.keys = [65, 83, 68]
+    @controls.keys = [65, 83, 68]
 
   setupGUI: ->
     @gui = new dat.GUI
