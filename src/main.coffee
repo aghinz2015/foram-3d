@@ -20,7 +20,8 @@ class Chamber extends THREE.Mesh
     @origin   = @center
     @aperture = @calculateAperture()
 
-    @parent = @
+    @ancestor = @
+    @child    = @
 
   buildChamberGeometry: ->
     centerTranslationMatrix = @buildCenterTranslationMatrix()
@@ -53,9 +54,12 @@ class Chamber extends THREE.Mesh
   setAperture: (aperture) ->
     @aperture = aperture
 
-  setParent: (parent) ->
-    @parent = parent
-    @origin = parent.aperture if parent
+  setAncestor: (ancestor) ->
+    @ancestor = ancestor
+    @origin = ancestor.aperture if ancestor
+
+  setChild: (child) ->
+    @child = child
 
   calculateGeometryRing: ->
     vertex for vertex in @.geometry.vertices when vertex.z == 0
@@ -71,13 +75,13 @@ class Foram extends THREE.Object3D
     @currentChamber = initialChamber
 
   buildInitialChamber: ->
-    new Chamber(new THREE.Vector3(0, 0, 0), 5)
+    new Chamber(new THREE.Vector3(0, 0, 0), @genotype.initialRadius)
 
   buildChambers: (numChambers) ->
-    @evolve() for i in [1..numChambers-1]
+    @calculateNextChamber() for i in [1..numChambers-1]
     @build()
 
-  evolve: ->
+  calculateNextChamber: ->
     newCenter = @calculateNewCenter()
     newRadius = @calculateNewRadius()
 
@@ -86,11 +90,21 @@ class Foram extends THREE.Object3D
     newAperture = @calculateNewAperture newChamber
 
     newChamber.setAperture newAperture
-    newChamber.setParent @currentChamber
+    newChamber.setAncestor @currentChamber
+
+    @currentChamber.setChild newChamber
 
     @chambers.push newChamber
 
     @currentChamber = newChamber
+
+  evolve: ->
+    @currentChamber.visible = true
+    @currentChamber = @currentChamber.child
+
+  regress: ->
+    @currentChamber.visible = false
+    @currentChamber = @currentChamber.ancestor
 
   calculateNewCenter: ->
     currentOrigin   = @currentChamber.origin
@@ -123,7 +137,7 @@ class Foram extends THREE.Object3D
     newCenter
 
   calculateNewRadius: ->
-    @currentChamber.parent.radius * @genotype.growthFactor
+    @currentChamber.ancestor.radius * @genotype.growthFactor
 
   calculateNewAperture: (newChamber) ->
     newCenter   = newChamber.center
@@ -204,15 +218,24 @@ class Simulation
       beta:              0.5
       translationFactor: 0.5
       growthFactor:      1.1
+      initialRadius:     5
       numChambers:       7
       simulate:          => @simulate(genotype)
+
+    structureAnalyzer =
+      evolve:  => @foram.evolve()
+      regress: => @foram.regress()
 
     @gui.add(genotype, 'phi')
     @gui.add(genotype, 'beta')
     @gui.add(genotype, 'translationFactor')
     @gui.add(genotype, 'growthFactor')
+    @gui.add(genotype, 'initialRadius')
     @gui.add(genotype, 'numChambers')
     @gui.add(genotype, 'simulate')
+
+    @gui.add(structureAnalyzer, 'evolve')
+    @gui.add(structureAnalyzer, 'regress')
 
   simulate: (genotype) ->
     @scene.remove @foram if @foram
