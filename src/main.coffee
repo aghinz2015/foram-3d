@@ -8,6 +8,8 @@
 
 class Chamber extends THREE.Mesh
 
+  DEFAULT_TEXTURE: "assets/images/texture.gif"
+
   constructor: (@center, @radius) ->
     geometry = @buildChamberGeometry()
     material = @buildChamberMaterial()
@@ -31,7 +33,9 @@ class Chamber extends THREE.Mesh
     new THREE.Matrix4().makeTranslation @center.x, @center.y, @center.z
 
   buildChamberMaterial: ->
-    new THREE.MeshLambertMaterial { color: 0xffffff }
+    texture = THREE.ImageUtils.loadTexture @DEFAULT_TEXTURE
+
+    new THREE.MeshLambertMaterial { color: 0xffffff, map: texture }
 
   calculateAperture: ->
     aperture = @vertices[0]
@@ -196,7 +200,7 @@ class Simulation
 
   buildForam: ->
     @foram = new Foram {}
-    @foram.calculateChambers 7
+    @foram.calculateChambers 10
     @scene.add @foram
 
   animate: =>
