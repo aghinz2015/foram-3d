@@ -8,25 +8,37 @@
 
 class Chamber extends THREE.Mesh
 
-  constructor: (@origin, @radius) ->
-    originTranslationMatrix = new THREE.Matrix4().makeTranslation @origin.x, @origin.y, @origin.z
-
-    geometry = new THREE.SphereGeometry @radius, 32, 32
-    geometry.applyMatrix originTranslationMatrix
-
-    material = new THREE.MeshLambertMaterial { color: 0xffffff }
+  constructor: (@center, @radius) ->
+    geometry = @buildChamberGeometry()
+    material = @buildChamberMaterial()
 
     THREE.Mesh.call @, geometry, material
 
-    @vertices = @calculateGeometryRing()
+    @vertices = geometry.vertices
+    @origin   = @center
     @aperture = @calculateAperture()
+
+    @parent = @
+
+  buildChamberGeometry: ->
+    centerTranslationMatrix = @buildCenterTranslationMatrix()
+
+    geometry = new THREE.SphereGeometry @radius, 32, 32
+    geometry.applyMatrix centerTranslationMatrix
+    geometry
+
+  buildCenterTranslationMatrix: ->
+    new THREE.Matrix4().makeTranslation @center.x, @center.y, @center.z
+
+  buildChamberMaterial: ->
+    new THREE.MeshLambertMaterial { color: 0xffffff }
 
   calculateAperture: ->
     aperture = @vertices[0]
-    currentDistance = aperture.distanceTo @origin
+    currentDistance = aperture.distanceTo @center
 
     for vertex in @vertices[1..-1]
-      newDistance = vertex.distanceTo @origin
+      newDistance = vertex.distanceTo @center
 
       if newDistance < currentDistance
         aperture = vertex
@@ -37,6 +49,10 @@ class Chamber extends THREE.Mesh
   setAperture: (aperture) ->
     @aperture = aperture
 
+  setParent: (parent) ->
+    @parent = parent
+    @origin = parent.aperture if parent
+
   calculateGeometryRing: ->
     vertex for vertex in @.geometry.vertices when vertex.z == 0
 
@@ -45,74 +61,83 @@ class Foram extends THREE.Object3D
   constructor: (@genotype) ->
     THREE.Object3D.call @
 
-    @chambers = [@buildInitialChamber()]
+    initialChamber = @buildInitialChamber()
+
+    @chambers = [initialChamber]
+    @currentChamber = initialChamber
 
   buildInitialChamber: ->
     new Chamber(new THREE.Vector3(0, 0, 0), 5)
 
   calculateChambers: (numChambers) ->
-    for i in [0..numChambers - 2]
-      # fetch origin and aperture of current chamber
+    @evolve() for i in [1..numChambers-1]
+    @build()
 
-      currentOrigin = if i > 0
-                        @chambers[i - 1].aperture
-                      else
-                        @chambers[i].origin
+  evolve: ->
+    currentOrigin   = @currentChamber.origin
+    currentAperture = @currentChamber.aperture
 
-      currentAperture = @chambers[i].aperture
+    # calculate initial growth vector (reference line)
 
-      # calculate initial growth vector (reference line)
+    growthVector = new THREE.Vector3
+    growthVector.subVectors currentAperture, currentOrigin
 
-      growthVector = new THREE.Vector3
-      growthVector.subVectors currentAperture, currentOrigin
+    # deviate growth vector from reference line
 
-      # deviate growth vector from reference line
+    horizontalRotationAxis = new THREE.Vector3 0, 0, 1
+    verticalRotationAxis   = new THREE.Vector3 1, 0, 0
 
-      rotationAxis = new THREE.Vector3 0, 0, 1
+    growthVector.applyAxisAngle horizontalRotationAxis, 0.9
+    growthVector.applyAxisAngle growthVector, 2.5
 
-      growthVector.applyAxisAngle rotationAxis, 20
+    # multiply growth vector by translaction factor
 
-      # multiply growth vector by translaction factor
+    growthVector.normalize()
 
-      growthVector.normalize()
-      growthVector.multiplyScalar 1.2
+    growthVector.multiplyScalar 1.5
 
-      # calculate origin of new chamber
+    # calculate center of new chamber
 
-      newOrigin = new THREE.Vector3
-      newOrigin.copy currentAperture
-      newOrigin.add growthVector
+    newCenter = new THREE.Vector3
+    newCenter.copy currentAperture
+    newCenter.add growthVector
 
-      # build new chamber
+    # build new chamber
 
-      newChamber = new Chamber newOrigin, 5
+    newRadius = @currentChamber.parent.radius * 1.1
 
-      # calculate aperture of new chamber
+    newChamber = new Chamber newCenter, newRadius
 
-      newAperture = newChamber.vertices[0]
-      currentDistance = newAperture.distanceTo newOrigin
+    # calculate aperture of new chamber
 
-      for vertex in newChamber.vertices[1..-1]
-        newDistance = vertex.distanceTo newOrigin
+    newAperture = newChamber.vertices[0]
+    currentDistance = newAperture.distanceTo newCenter
 
-        if newDistance < currentDistance
-          contains = false
+    for vertex in newChamber.vertices[1..-1]
+      newDistance = vertex.distanceTo newCenter
 
-          for chamber in @chambers
-            if chamber.radius > newAperture.distanceTo chamber.origin
-              contains = true
-              break
+      if newDistance < currentDistance
+        contains = false
 
-          unless contains
-            newAperture = vertex
-            currentDistance = newDistance
+        for chamber in @chambers
+          if chamber.radius > newAperture.distanceTo chamber.center
+            contains = true
+            break
 
-      newChamber.setAperture newAperture
+        unless contains
+          newAperture = vertex
+          currentDistance = newDistance
 
-      # add new chamber to foram
+    newChamber.setAperture newAperture
+    newChamber.setParent @currentChamber
 
-      @chambers.push newChamber
+    # add new chamber to foram
 
+    @chambers.push newChamber
+
+    @currentChamber = newChamber
+
+  build: ->
     @.add chamber for chamber in @chambers
 
 class Simulation
@@ -162,7 +187,7 @@ class Simulation
 
   buildForam: ->
     @foram = new Foram {}
-    @foram.calculateChambers 10
+    @foram.calculateChambers 7
     @scene.add @foram
 
   animate: =>
