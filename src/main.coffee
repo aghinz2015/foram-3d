@@ -1,10 +1,10 @@
-# For Mr White... [*]
+#                             For Mr White... [*]
 #
-# __||||||__
-#   |    |
-#   [^][^]
-#   | __ |
-#   |____|
+#                                __||||||__
+#                                  |    |
+#                                  [^][^]
+#                                  | __ |
+#                                  |____|
 
 class Chamber extends THREE.Mesh
 
