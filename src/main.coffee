@@ -74,6 +74,23 @@ class Foram extends THREE.Object3D
     @build()
 
   evolve: ->
+    newCenter = @calculateNewCenter()
+    newRadius = @calculateNewRadius()
+
+    newChamber = new Chamber newCenter, newRadius
+
+    newAperture = @calculateNewAperture newChamber
+
+    newChamber.setAperture newAperture
+    newChamber.setParent @currentChamber
+
+    @chambers.push newChamber
+
+    @currentChamber = newChamber
+
+  calculateNewCenter: ->
+    # fetch origin and aperture of current chamber
+
     currentOrigin   = @currentChamber.origin
     currentAperture = @currentChamber.aperture
 
@@ -87,13 +104,12 @@ class Foram extends THREE.Object3D
     horizontalRotationAxis = new THREE.Vector3 0, 0, 1
     verticalRotationAxis   = new THREE.Vector3 1, 0, 0
 
-    growthVector.applyAxisAngle horizontalRotationAxis, 0.9
-    growthVector.applyAxisAngle growthVector, 2.5
+    growthVector.applyAxisAngle horizontalRotationAxis, 1.5
+    growthVector.applyAxisAngle verticalRotationAxis, 0.75
 
     # multiply growth vector by translaction factor
 
     growthVector.normalize()
-
     growthVector.multiplyScalar 1.5
 
     # calculate center of new chamber
@@ -102,15 +118,15 @@ class Foram extends THREE.Object3D
     newCenter.copy currentAperture
     newCenter.add growthVector
 
-    # build new chamber
+    newCenter
 
-    newRadius = @currentChamber.parent.radius * 1.1
+  calculateNewRadius: ->
+    @currentChamber.parent.radius * 1.1
 
-    newChamber = new Chamber newCenter, newRadius
-
-    # calculate aperture of new chamber
-
+  calculateNewAperture: (newChamber) ->
+    newCenter   = newChamber.center
     newAperture = newChamber.vertices[0]
+
     currentDistance = newAperture.distanceTo newCenter
 
     for vertex in newChamber.vertices[1..-1]
@@ -128,14 +144,7 @@ class Foram extends THREE.Object3D
           newAperture = vertex
           currentDistance = newDistance
 
-    newChamber.setAperture newAperture
-    newChamber.setParent @currentChamber
-
-    # add new chamber to foram
-
-    @chambers.push newChamber
-
-    @currentChamber = newChamber
+    newAperture
 
   build: ->
     @.add chamber for chamber in @chambers
