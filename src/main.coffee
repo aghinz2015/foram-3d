@@ -253,5 +253,3 @@ class Simulation
 
   render: ->
     @renderer.render @scene, @camera
-
-module.exports = Simulation

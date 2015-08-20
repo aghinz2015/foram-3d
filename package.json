@@ -2,7 +2,7 @@
   "name": "Foram3D",
   "version": "1.0.0",
   "description": "Foram 3D visualisation tool",
-  "main": "./dist/foram3d.js",
+  "main": "foram3d.js",
   "scripts": {
     "test": "istanbul test --report html -x 'vendor/**' _mocha",
     "test-travis": "istanbul cover -x 'vendor/**' _mocha -- -R spec;A=$?;cat coverage/lcov.info | coveralls;exit $A"
@@ -18,24 +18,12 @@
   },
   "homepage": "https://github.com/bzurkowski/foram-3d",
   "devDependencies": {
-    "coffee-script": "~1",
-    "mocha": "*",
-    "chai": "*",
-    "istanbul": "*",
-    "gulp": "~3",
-    "gulp-util": "~2",
-    "coveralls": "~2",
-    "gulp-uglify": "~0",
-    "webpack": "~1",
-    "gulp-watch": "~0",
-    "gulp-plumber": "~0",
-    "through2": "~0",
-    "gulp-rename": "~1",
-    "coffee-loader": "~0",
-    "gulp-mocha": "~0.4.1"
-  },
-  "engines": {
-    "node": ">=0.10",
-    "npm": ">=1.2.10"
+    "gulp": "^3.9.0",
+    "gulp-coffee": "^2.3.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0"
   }
 }
