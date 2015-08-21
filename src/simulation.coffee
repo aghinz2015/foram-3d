@@ -67,10 +67,10 @@ class Simulation
       evolve:  => @foram.evolve()
       regress: => @foram.regress()
 
-    @gui.add(genotype, 'phi')
-    @gui.add(genotype, 'beta')
-    @gui.add(genotype, 'translationFactor')
-    @gui.add(genotype, 'growthFactor')
+    @gui.add(genotype, 'phi').step 0.01
+    @gui.add(genotype, 'beta').step 0.01
+    @gui.add(genotype, 'translationFactor').step 0.01
+    @gui.add(genotype, 'growthFactor').step 0.01
     @gui.add(genotype, 'initialRadius')
     @gui.add(genotype, 'numChambers')
     @gui.add(genotype, 'simulate')
