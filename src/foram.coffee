@@ -80,14 +80,7 @@ class Foram extends THREE.Object3D
     newCenter
 
   calculateNewRadius: ->
-    ancestor = @currentChamber.ancestor
-
-    prevRadius = if ancestor
-                   ancestor.radius
-                 else
-                   @currentChamber.radius
-
-    prevRadius * @genotype.growthFactor
+    (@currentChamber.ancestor || @currentChamber).radius * @genotype.growthFactor
 
   calculateNewAperture: (newChamber) ->
     newCenter   = newChamber.center
