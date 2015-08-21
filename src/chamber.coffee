@@ -12,9 +12,6 @@ class Chamber extends THREE.Mesh
     @origin   = @center
     @aperture = @calculateAperture()
 
-    @ancestor = @
-    @child    = @
-
   buildChamberGeometry: ->
     centerTranslationMatrix = @buildCenterTranslationMatrix()
 

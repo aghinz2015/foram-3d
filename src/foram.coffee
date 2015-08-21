@@ -37,8 +37,11 @@ class Foram extends THREE.Object3D
     @currentChamber = @currentChamber.child
 
   regress: ->
-    @currentChamber.visible = false
-    @currentChamber = @currentChamber.ancestor
+    ancestor = @currentChamber.ancestor
+
+    if ancestor
+      @currentChamber.visible = false
+      @currentChamber = ancestor
 
   calculateNewCenter: ->
     currentOrigin   = @currentChamber.origin
@@ -71,7 +74,14 @@ class Foram extends THREE.Object3D
     newCenter
 
   calculateNewRadius: ->
-    @currentChamber.ancestor.radius * @genotype.growthFactor
+    ancestor = @currentChamber.ancestor
+
+    prevRadius = if ancestor
+                   ancestor.radius
+                 else
+                   @currentChamber.radius
+
+    prevRadius * @genotype.growthFactor
 
   calculateNewAperture: (newChamber) ->
     newCenter   = newChamber.center
