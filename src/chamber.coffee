@@ -45,10 +45,10 @@ class Chamber extends THREE.Mesh
 
   setAncestor: (ancestor) ->
     @ancestor = ancestor
-    @origin = ancestor.aperture if ancestor
 
-  setChild: (child) ->
-    @child = child
+    if ancestor
+      @origin = ancestor.aperture if ancestor
+      ancestor.child = @
 
   calculateGeometryRing: ->
     vertex for vertex in @.geometry.vertices when vertex.z == 0

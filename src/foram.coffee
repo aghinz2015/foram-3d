@@ -43,8 +43,6 @@ class Foram extends THREE.Object3D
     newChamber.setAperture newAperture
     newChamber.setAncestor @currentChamber
 
-    @currentChamber.setChild newChamber
-
     @chambers.push newChamber
 
     @currentChamber = newChamber
