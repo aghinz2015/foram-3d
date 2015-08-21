@@ -15,6 +15,23 @@ class Foram extends THREE.Object3D
     @calculateNextChamber() for i in [1..numChambers-1]
     @build()
 
+  evolve: ->
+    child = @currentChamber.child
+
+    if child
+      @currentChamber = child
+      @currentChamber.visible = true
+    else
+      @calculateNextChamber()
+      @build()
+
+  regress: ->
+    ancestor = @currentChamber.ancestor
+
+    if ancestor
+      @currentChamber.visible = false
+      @currentChamber = ancestor
+
   calculateNextChamber: ->
     newCenter = @calculateNewCenter()
     newRadius = @calculateNewRadius()
@@ -31,17 +48,6 @@ class Foram extends THREE.Object3D
     @chambers.push newChamber
 
     @currentChamber = newChamber
-
-  evolve: ->
-    @currentChamber.visible = true
-    @currentChamber = @currentChamber.child
-
-  regress: ->
-    ancestor = @currentChamber.ancestor
-
-    if ancestor
-      @currentChamber.visible = false
-      @currentChamber = ancestor
 
   calculateNewCenter: ->
     currentOrigin   = @currentChamber.origin
