@@ -1,6 +1,6 @@
 class Chamber extends THREE.Mesh
 
-  DEFAULT_TEXTURE: "assets/images/texture.gif"
+  DEFAULT_TEXTURE: "../assets/images/texture.gif"
 
   constructor: (@center, @radius) ->
     geometry = @buildChamberGeometry()
@@ -20,9 +20,7 @@ class Chamber extends THREE.Mesh
     geometry
 
   buildChamberMaterial: ->
-    texture = THREE.ImageUtils.loadTexture @DEFAULT_TEXTURE
-
-    new THREE.MeshLambertMaterial { color: 0xffffff, map: texture }
+    new THREE.MeshLambertMaterial { color: 0xffffff }
 
   buildCenterTranslationMatrix: ->
     new THREE.Matrix4().makeTranslation @center.x, @center.y, @center.z
