@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Foram 3D Visualisation tool</title>
+
+    <!-- bower:css -->
+    <!-- endinject -->
+
+    <!-- inject:css -->
+    <!-- endinject -->
+
+    <style>
+      * { margin: 0px; }
+    </style>
+  </head>
+
+  <body>
+    <div id="canvas"></div>
+
+    <!-- bower:js -->
+    <script src="../bower_components/dat.gui/dat.gui.js"></script>
+    <script src="../bower_components/three.js/build/three.js"></script>
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <!-- endinject -->
+
+    <!-- inject:js -->
+    <script src="../vendors/trackball_controls.js"></script>
+    <script src="js/foram_3d.js"></script>
+    <!-- endinject -->
+
+    <script type="text/javascript">
+      var canvas     = $('#canvas');
+      var simulation = new Simulation(canvas);
+
+      simulation.animate();
+    </script>
+  </body>
+</html>

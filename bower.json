@@ -1,11 +1,18 @@
 {
   "name": "foram-3d",
   "homepage": "https://github.com/aghinz2015/foram-3d",
-  "authors": ["Bartosz Żurkowski"],
+  "authors": [
+    "Bartosz Żurkowski"
+  ],
   "description": "Foram 3D visualization tool",
   "main": "dist/js/foram_3d.js",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "dat.gui": "*",
+    "three.js": "threejs#*"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.4"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
