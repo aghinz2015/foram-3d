@@ -18,10 +18,10 @@ gulp.task("build", function() {
 
   return result
           .pipe(sourcemaps.write())
-          .pipe(gulp.dest("public/js"))
+          .pipe(gulp.dest("dist/js"))
           .pipe(uglify())
           .pipe(rename("foram_3d.min.js"))
-          .pipe(gulp.dest('public/js'));
+          .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task("watch", ["build"], function() {
