@@ -66,28 +66,31 @@ class Simulation
       beta:              0.5
       translationFactor: 0.5
       growthFactor:      1.1
-      numChambers:       7
-      simulate:          => @simulate(genotype)
+
+    simulationOptions =
+      numChambers: 7
 
     structureAnalyzer =
-      evolve:  => @foram.evolve()
-      regress: => @foram.regress()
+      evolve:   => @foram.evolve()
+      regress:  => @foram.regress()
+      simulate: => @simulate(genotype, simulationOptions)
 
     @gui.add(genotype, 'phi').step 0.01
     @gui.add(genotype, 'beta').step 0.01
     @gui.add(genotype, 'translationFactor').step 0.01
     @gui.add(genotype, 'growthFactor').step 0.01
-    @gui.add(genotype, 'numChambers')
-    @gui.add(genotype, 'simulate')
 
+    @gui.add(simulationOptions, 'numChambers')
+
+    @gui.add(structureAnalyzer, 'simulate')
     @gui.add(structureAnalyzer, 'evolve')
     @gui.add(structureAnalyzer, 'regress')
 
-  simulate: (genotype) ->
+  simulate: (genotype, options) ->
     @scene.remove @foram if @foram
 
     @foram = new Foram genotype
-    @foram.buildChambers genotype.numChambers
+    @foram.buildChambers options.numChambers
 
     @scene.add @foram
 
