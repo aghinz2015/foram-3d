@@ -71,9 +71,10 @@ class Simulation
       numChambers: 7
 
     structureAnalyzer =
-      evolve:   => @foram.evolve()
-      regress:  => @foram.regress()
-      simulate: => @simulate(genotype, simulationOptions)
+      simulate:      => @simulate(genotype, simulationOptions)
+      evolve:        => @evolve()
+      regress:       => @regress()
+      centroidsLine: => @toggleCentroidsLine()
 
     @gui.add(genotype, 'phi').step 0.01
     @gui.add(genotype, 'beta').step 0.01
@@ -85,6 +86,7 @@ class Simulation
     @gui.add(structureAnalyzer, 'simulate')
     @gui.add(structureAnalyzer, 'evolve')
     @gui.add(structureAnalyzer, 'regress')
+    @gui.add(structureAnalyzer, 'centroidsLine')
 
   simulate: (genotype, options) ->
     @scene.remove @foram if @foram
@@ -93,6 +95,29 @@ class Simulation
     @foram.buildChambers options.numChambers
 
     @scene.add @foram
+
+  evolve: ->
+    return unless @foram
+
+    @foram.evolve()
+    @centroidsLine.rebuild() if @centroidsLine
+
+  regress: ->
+    return unless @foram
+
+    @foram.regress()
+    @centroidsLine.rebuild() if @centroidsLine
+
+  toggleCentroidsLine: ->
+    return unless @foram
+
+    unless @centroidsLine
+      @centroidsLine = new CentroidsLine(@foram)
+      @centroidsLine.visible = false
+
+      @scene.add @centroidsLine
+
+    @centroidsLine.visible = !@centroidsLine.visible
 
   animate: =>
     requestAnimationFrame @animate
