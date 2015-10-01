@@ -5,7 +5,7 @@ class CentroidsLine extends THREE.Line
   constructor: (@foram) ->
     @positionsBuffer = @buildPositionsBuffer()
 
-    @geometry = @buildLineGometry @positionsBuffer
+    @geometry = @buildLineGometry()
     @material = @buildLineMaterial()
 
     @rebuild()
@@ -17,9 +17,9 @@ class CentroidsLine extends THREE.Line
 
     new THREE.BufferAttribute buffer, 3
 
-  buildLineGometry: (positionsBuffer) ->
+  buildLineGometry: ->
     geometry = new THREE.BufferGeometry()
-    geometry.addAttribute "position", positionsBuffer
+    geometry.addAttribute "position", @positionsBuffer
 
     geometry
 

@@ -100,7 +100,7 @@ class Simulation
     materialFolder.add(@material, 'opacity')
 
   simulate: (genotype, options) ->
-    @scene.remove @foram if @foram
+    @reset()
 
     @foram = new Foram genotype
     @foram.buildChambers options.numChambers
@@ -123,7 +123,7 @@ class Simulation
     return unless @foram
 
     unless @centroidsLine
-      @centroidsLine = new CentroidsLine(@foram)
+      @centroidsLine = new CentroidsLine @foram
       @centroidsLine.visible = false
 
       @scene.add @centroidsLine
@@ -132,6 +132,13 @@ class Simulation
 
   toggleChambers: ->
     @foram.visible = !@foram.visible if @foram
+
+  reset: ->
+    @scene.remove @foram         if @foram
+    @scene.remove @centroidsLine if @centroidsLine
+
+    @foram = null
+    @centroidsLine = null
 
   animate: =>
     requestAnimationFrame @animate
