@@ -8,10 +8,17 @@
 
 class Simulation
 
-  constructor: (@canvas) ->
+  constructor: (@canvas, @options) ->
+    defaults = { dev: false }
+
+    @options ||= {}
+
+    for option of defaults
+      @options[option] ||= defaults[option]
+
     @setupScene()
     @setupControls()
-    @setupGUI()
+    @setupGUI() if @options.dev
 
   setupScene: ->
     @scene = new THREE.Scene()
