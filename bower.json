@@ -7,9 +7,9 @@
   "description": "Foram 3D visualization tool",
   "main": "dist/js/foram_3d.js",
   "dependencies": {
-    "dat.gui": "*",
-    "three.js": "threejs#*",
-    "threejs-trackball-controls": "*"
+    "threejs": "r72",
+    "threejs-trackball-controls": "*",
+    "dat.gui": "*"
   },
   "devDependencies": {
     "jquery": "~2.1.4"
