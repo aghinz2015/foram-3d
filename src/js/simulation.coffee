@@ -61,6 +61,10 @@ class Simulation
   setupGUI: ->
     @gui = new dat.GUI
 
+    genotypeFolder  = @gui.addFolder "Genotype"
+    structureFolder = @gui.addFolder "Structure analyzer"
+    materialFolder  = @gui.addFolder "Material"
+
     genotype =
       phi:               0.5
       beta:              0.5
@@ -80,20 +84,20 @@ class Simulation
     @material =
       opacity: 1.0
 
-    @gui.add(genotype, 'phi').step 0.01
-    @gui.add(genotype, 'beta').step 0.01
-    @gui.add(genotype, 'translationFactor').step 0.01
-    @gui.add(genotype, 'growthFactor').step 0.01
+    genotypeFolder.add(genotype, 'phi').step 0.01
+    genotypeFolder.add(genotype, 'beta').step 0.01
+    genotypeFolder.add(genotype, 'translationFactor').step 0.01
+    genotypeFolder.add(genotype, 'growthFactor').step 0.01
 
-    @gui.add(simulationOptions, 'numChambers')
+    genotypeFolder.add(simulationOptions, 'numChambers')
 
-    @gui.add(structureAnalyzer, 'simulate')
-    @gui.add(structureAnalyzer, 'evolve')
-    @gui.add(structureAnalyzer, 'regress')
-    @gui.add(structureAnalyzer, 'centroidsLine')
-    @gui.add(structureAnalyzer, 'toggleChambers')
+    structureFolder.add(structureAnalyzer, 'simulate')
+    structureFolder.add(structureAnalyzer, 'evolve')
+    structureFolder.add(structureAnalyzer, 'regress')
+    structureFolder.add(structureAnalyzer, 'centroidsLine')
+    structureFolder.add(structureAnalyzer, 'toggleChambers')
 
-    @gui.add(@material, 'opacity')
+    materialFolder.add(@material, 'opacity')
 
   simulate: (genotype, options) ->
     @scene.remove @foram if @foram
