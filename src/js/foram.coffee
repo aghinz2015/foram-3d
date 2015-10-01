@@ -5,13 +5,21 @@ class Foram extends THREE.Object3D
   constructor: (@genotype) ->
     THREE.Object3D.call @
 
+    @material = @buildChamberMaterial()
+
     initialChamber = @buildInitialChamber()
 
     @chambers = [initialChamber]
     @currentChamber = initialChamber
 
+  buildChamberMaterial: ->
+    new THREE.MeshLambertMaterial { color: 0xffffff, transparent: true }
+
   buildInitialChamber: ->
-    new Chamber(new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS)
+    @buildChamber new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS
+
+  buildChamber: (center, radius) ->
+    new Chamber center, radius, @material
 
   buildChambers: (numChambers) ->
     @calculateNextChamber() for i in [1..numChambers-1]
@@ -38,7 +46,7 @@ class Foram extends THREE.Object3D
     newCenter = @calculateNewCenter()
     newRadius = @calculateNewRadius()
 
-    newChamber = new Chamber newCenter, newRadius
+    newChamber = @buildChamber newCenter, newRadius
 
     newAperture = @calculateNewAperture newChamber
 

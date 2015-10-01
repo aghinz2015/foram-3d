@@ -77,6 +77,9 @@ class Simulation
       centroidsLine:  => @toggleCentroidsLine()
       toggleChambers: => @toggleChambers()
 
+    @material =
+      opacity: 1.0
+
     @gui.add(genotype, 'phi').step 0.01
     @gui.add(genotype, 'beta').step 0.01
     @gui.add(genotype, 'translationFactor').step 0.01
@@ -89,6 +92,8 @@ class Simulation
     @gui.add(structureAnalyzer, 'regress')
     @gui.add(structureAnalyzer, 'centroidsLine')
     @gui.add(structureAnalyzer, 'toggleChambers')
+
+    @gui.add(@material, 'opacity')
 
   simulate: (genotype, options) ->
     @scene.remove @foram if @foram
@@ -126,6 +131,9 @@ class Simulation
 
   animate: =>
     requestAnimationFrame @animate
+
+    if @foram
+      @foram.material.opacity = @material.opacity
 
     @controls.update()
     @render()
