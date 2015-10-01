@@ -1,5 +1,7 @@
 class Foram extends THREE.Object3D
 
+  INITIAL_RADIUS: 5
+
   constructor: (@genotype) ->
     THREE.Object3D.call @
 
@@ -9,7 +11,7 @@ class Foram extends THREE.Object3D
     @currentChamber = initialChamber
 
   buildInitialChamber: ->
-    new Chamber(new THREE.Vector3(0, 0, 0), @genotype.initialRadius)
+    new Chamber(new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS)
 
   buildChambers: (numChambers) ->
     @calculateNextChamber() for i in [1..numChambers-1]

@@ -66,7 +66,6 @@ class Simulation
       beta:              0.5
       translationFactor: 0.5
       growthFactor:      1.1
-      initialRadius:     5
       numChambers:       7
       simulate:          => @simulate(genotype)
 
@@ -78,7 +77,6 @@ class Simulation
     @gui.add(genotype, 'beta').step 0.01
     @gui.add(genotype, 'translationFactor').step 0.01
     @gui.add(genotype, 'growthFactor').step 0.01
-    @gui.add(genotype, 'initialRadius')
     @gui.add(genotype, 'numChambers')
     @gui.add(genotype, 'simulate')
 
