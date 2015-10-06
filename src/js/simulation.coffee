@@ -81,7 +81,7 @@ class Simulation
       centroidsLine:  => @toggleCentroidsLine()
       toggleChambers: => @toggleChambers()
 
-    @material =
+    materialOptions =
       opacity: 1.0
 
     genotypeFolder.add(genotype, 'phi').step 0.01
@@ -97,7 +97,8 @@ class Simulation
     structureFolder.add(structureAnalyzer, 'centroidsLine')
     structureFolder.add(structureAnalyzer, 'toggleChambers')
 
-    materialFolder.add(@material, 'opacity')
+    materialFolder.add(materialOptions, 'opacity').onFinishChange =>
+      @applyOpacity materialOptions.opacity
 
   simulate: (genotype, options) ->
     @reset()
@@ -133,6 +134,11 @@ class Simulation
   toggleChambers: ->
     @foram.visible = !@foram.visible if @foram
 
+  applyOpacity: (opacity) ->
+    return unless @foram
+
+    @foram.material.opacity = opacity
+
   reset: ->
     @scene.remove @foram         if @foram
     @scene.remove @centroidsLine if @centroidsLine
@@ -142,9 +148,6 @@ class Simulation
 
   animate: =>
     requestAnimationFrame @animate
-
-    if @foram
-      @foram.material.opacity = @material.opacity
 
     @controls.update()
     @render()
