@@ -9,7 +9,7 @@
   "dependencies": {
     "dat.gui": "*",
     "three.js": "threejs#*",
-    "trackball_controls": "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"
+    "threejs-trackball-controls": "*"
   },
   "devDependencies": {
     "jquery": "~2.1.4"
