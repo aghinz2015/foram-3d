@@ -139,6 +139,12 @@ class Simulation
 
     @foram.material.opacity = opacity
 
+  exportToObj: ->
+    return unless @foram
+
+    exporter = new THREE.OBJExporter()
+    exporter.parse @foram
+
   reset: ->
     @scene.remove @foram         if @foram
     @scene.remove @centroidsLine if @centroidsLine
