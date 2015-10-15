@@ -8,6 +8,7 @@
   "main": "dist/js/foram_3d.js",
   "dependencies": {
     "threejs": "r72",
+    "threejs-obj-exporter": "~0.72.0",
     "threejs-trackball-controls": "*",
     "dat.gui": "*"
   },
