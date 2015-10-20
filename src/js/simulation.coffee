@@ -71,10 +71,11 @@ class Simulation
     materialFolder  = @gui.addFolder "Material"
 
     genotype =
-      phi:               0.5
-      beta:              0.5
-      translationFactor: 0.5
-      growthFactor:      1.1
+      phi:                 0.5
+      beta:                0.5
+      translationFactor:   0.5
+      growthFactor:        1.1
+      wallThicknessFactor: 1.1
 
     simulationOptions =
       numChambers: 7
@@ -93,6 +94,7 @@ class Simulation
     genotypeFolder.add(genotype, 'beta').step 0.01
     genotypeFolder.add(genotype, 'translationFactor').step 0.01
     genotypeFolder.add(genotype, 'growthFactor').step 0.01
+    genotypeFolder.add(genotype, 'wallThicknessFactor').step 0.01
 
     genotypeFolder.add(simulationOptions, 'numChambers')
 

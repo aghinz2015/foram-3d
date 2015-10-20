@@ -2,7 +2,7 @@ class Chamber extends THREE.Mesh
 
   DEFAULT_TEXTURE: "../assets/images/texture.gif"
 
-  constructor: (@center, @radius, material) ->
+  constructor: (@center, @radius, @thickness, material) ->
     geometry = @buildChamberGeometry()
 
     THREE.Mesh.call @, geometry, material

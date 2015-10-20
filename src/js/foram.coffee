@@ -1,6 +1,7 @@
 class Foram extends THREE.Object3D
 
   INITIAL_RADIUS: 5
+  INITIAL_THICKNESS: 3
 
   constructor: (@genotype) ->
     THREE.Object3D.call @
@@ -16,10 +17,10 @@ class Foram extends THREE.Object3D
     new THREE.MeshLambertMaterial { color: 0xffffff, transparent: true }
 
   buildInitialChamber: ->
-    @buildChamber new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS
+    @buildChamber new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS, @INITIAL_THICKNESS
 
-  buildChamber: (center, radius) ->
-    new Chamber center, radius, @material
+  buildChamber: (center, radius, thickness) ->
+    new Chamber center, radius, thickness, @material
 
   buildChambers: (numChambers) ->
     @calculateNextChamber() for i in [1..numChambers-1]
@@ -43,10 +44,11 @@ class Foram extends THREE.Object3D
       @currentChamber = ancestor
 
   calculateNextChamber: ->
-    newCenter = @calculateNewCenter()
-    newRadius = @calculateNewRadius()
+    newCenter    = @calculateNewCenter()
+    newRadius    = @calculateNewRadius()
+    newThickness = @calculateNewThickness()
 
-    newChamber = @buildChamber newCenter, newRadius
+    newChamber = @buildChamber newCenter, newRadius, newThickness
 
     newAperture = @calculateNewAperture newChamber
 
@@ -88,7 +90,13 @@ class Foram extends THREE.Object3D
     newCenter
 
   calculateNewRadius: ->
-    (@currentChamber.ancestor || @currentChamber).radius * @genotype.growthFactor
+    @ancestorOrCurrentChamber().radius * @genotype.growthFactor
+
+  calculateNewThickness: ->
+    @ancestorOrCurrentChamber().thickness * @genotype.wallThicknessFactor
+
+  ancestorOrCurrentChamber: ->
+    @currentChamber.ancestor || @currentChamber
 
   calculateNewAperture: (newChamber) ->
     newCenter   = newChamber.center
