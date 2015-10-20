@@ -21,6 +21,8 @@ class Simulation
     @setupAutoResize()
     @setupGUI() if @options.dev
 
+    @thicknessVectorsVisible = false
+
   setupScene: ->
     @scene = new THREE.Scene()
 
@@ -81,11 +83,12 @@ class Simulation
       numChambers: 7
 
     structureAnalyzer =
-      simulate:       => @simulate(genotype, simulationOptions)
-      evolve:         => @evolve()
-      regress:        => @regress()
-      centroidsLine:  => @toggleCentroidsLine()
-      toggleChambers: => @toggleChambers()
+      simulate:          => @simulate(genotype, simulationOptions)
+      evolve:            => @evolve()
+      regress:           => @regress()
+      centroidsLine:     => @toggleCentroidsLine()
+      thicknessVectors:  => @toggleThicknessVectors()
+      toggleChambers:    => @toggleChambers()
 
     materialOptions =
       opacity: 1.0
@@ -102,6 +105,7 @@ class Simulation
     structureFolder.add(structureAnalyzer, 'evolve')
     structureFolder.add(structureAnalyzer, 'regress')
     structureFolder.add(structureAnalyzer, 'centroidsLine')
+    structureFolder.add(structureAnalyzer, 'thicknessVectors')
     structureFolder.add(structureAnalyzer, 'toggleChambers')
 
     materialFolder.add(materialOptions, 'opacity').onFinishChange =>
@@ -120,6 +124,7 @@ class Simulation
 
     @foram.evolve()
     @centroidsLine.rebuild() if @centroidsLine
+    @updateThicknessVectors()
 
   regress: ->
     return unless @foram
@@ -137,6 +142,28 @@ class Simulation
       @scene.add @centroidsLine
 
     @centroidsLine.visible = !@centroidsLine.visible
+
+  showThicknessVectors: ->
+    return unless @foram
+
+    for chamber in @foram.chambers
+      chamber.showThicknessVector()
+
+  hideThicknessVectors: ->
+    return unless @foram
+
+    for chamber in @foram.chambers
+      chamber.hideThicknessVector()
+
+  toggleThicknessVectors: ->
+    @thicknessVectorsVisible = !@thicknessVectorsVisible
+    @updateThicknessVectors()
+
+  updateThicknessVectors: ->
+    if @thicknessVectorsVisible
+      @showThicknessVectors()
+    else
+      @hideThicknessVectors()
 
   toggleChambers: ->
     @foram.visible = !@foram.visible if @foram
