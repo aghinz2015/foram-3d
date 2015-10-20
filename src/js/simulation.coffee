@@ -18,6 +18,7 @@ class Simulation
 
     @setupScene()
     @setupControls()
+    @setupAutoResize()
     @setupGUI() if @options.dev
 
   setupScene: ->
@@ -57,6 +58,10 @@ class Simulation
     @controls.dynamicDampingFactor = 0.3
 
     @controls.keys = [65, 83, 68]
+
+  setupAutoResize: ->
+    window.addEventListener 'resize', =>
+      @resize()
 
   setupGUI: ->
     @gui = new dat.GUI
@@ -160,3 +165,9 @@ class Simulation
 
   render: ->
     @renderer.render @scene, @camera
+
+  resize: ->
+    @camera.aspect = window.innerWidth / window.innerHeight
+    @camera.updateProjectionMatrix()
+
+    @renderer.setSize window.innerWidth, window.innerHeight
