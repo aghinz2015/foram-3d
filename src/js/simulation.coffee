@@ -91,7 +91,7 @@ class Simulation
       toggleChambers:    => @toggleChambers()
 
     materialOptions =
-      opacity: 1.0
+      opacity: 0.5
 
     genotypeFolder.add(genotype, 'phi').step 0.01
     genotypeFolder.add(genotype, 'beta').step 0.01

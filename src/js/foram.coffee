@@ -2,6 +2,7 @@ class Foram extends THREE.Object3D
 
   INITIAL_RADIUS: 5
   INITIAL_THICKNESS: 3
+  INITIAL_OPACITY: 0.5
 
   constructor: (@genotype) ->
     THREE.Object3D.call @
@@ -14,7 +15,7 @@ class Foram extends THREE.Object3D
     @currentChamber = initialChamber
 
   buildChamberMaterial: ->
-    new THREE.MeshLambertMaterial { color: 0xffffff, transparent: true }
+    new THREE.MeshLambertMaterial { color: 0xffffff, transparent: true, opacity: @INITIAL_OPACITY }
 
   buildInitialChamber: ->
     @buildChamber new THREE.Vector3(0, 0, 0), @INITIAL_RADIUS, @INITIAL_THICKNESS
