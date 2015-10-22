@@ -64,6 +64,3 @@ class Chamber extends THREE.Mesh
 
   hideThicknessVector: ->
     @thicknessVector.visible = false
-
-  toggleThicknessVector: ->
-    @thicknessVector.visible != @thicknessVector.visible
