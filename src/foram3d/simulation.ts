@@ -276,7 +276,7 @@ module Foram3D {
       };
 
       var structureAnalyzer = {
-        numChambers:      7,
+        numChambers:      20,
         simulate:         () => this.simulate(genotype, structureAnalyzer.numChambers),
         evolve:           () => this.evolve(),
         regress:          () => this.regress(),

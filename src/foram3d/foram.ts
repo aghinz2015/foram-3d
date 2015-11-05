@@ -14,6 +14,7 @@ module Foram3D {
     material: THREE.Material;
 
     private currentChamber: Chamber;
+    private prevChambers: Array<Chamber> = [];
 
     constructor(genotype: GenotypeParams, numChambers: number) {
       super();
@@ -21,8 +22,11 @@ module Foram3D {
       this.genotype = genotype;
       this.material = this.buildMaterial();
 
-      this.chambers = [this.buildInitialChamber()];
-      this.currentChamber = this.chambers[0];
+      var initialChamber = this.buildInitialChamber();
+
+      this.chambers = [initialChamber];
+      this.currentChamber = initialChamber;
+      this.prevChambers[0] = initialChamber;
 
       for (var i = 1; i < numChambers; i++) {
         this.evolve();
@@ -76,38 +80,66 @@ module Foram3D {
       newChamber.aperture = newAperture;
       newChamber.setAncestor(this.currentChamber);
 
+      this.prevChambers[2] = this.prevChambers[1];
+      this.prevChambers[1] = this.prevChambers[0];
+      this.prevChambers[0] = newChamber;
+
       return newChamber;
     }
 
     private calculateNewCenter(): THREE.Vector3 {
-      var currentOrigin, currentAperture, growthVector, horizontalRotationAxis,
-          verticalRotationAxis, newCenter;
+      var referenceLine, deviationSurfaceSpanning, phiDeviationAxis, growthVector,
+          newCenter;
 
-      currentOrigin = this.currentChamber.origin;
-      currentAperture = this.currentChamber.aperture;
+      referenceLine = new THREE.Vector3();
 
-      // calculate initial growth vector (reference line)
+      if (this.chambers.length == 1) {
+        referenceLine.subVectors(
+          this.prevChambers[0].aperture,
+          this.prevChambers[0].center
+        );
+      } else {
+        referenceLine.subVectors(
+          this.prevChambers[0].aperture,
+          this.prevChambers[1].aperture
+        )
+      }
+
+      deviationSurfaceSpanning = new THREE.Vector3();
+
+      switch (this.chambers.length) {
+        case 1:
+          deviationSurfaceSpanning.set(0, 1, 0);
+          break;
+        case 2:
+          deviationSurfaceSpanning.subVectors(
+            this.prevChambers[1].center,
+            this.prevChambers[1].aperture
+          );
+          break;
+        default:
+          deviationSurfaceSpanning.subVectors(
+            this.prevChambers[2].aperture,
+            this.prevChambers[1].aperture
+          );
+      }
+
+      phiDeviationAxis = new THREE.Vector3();
+      phiDeviationAxis.crossVectors(referenceLine, deviationSurfaceSpanning);
+      phiDeviationAxis.normalize();
 
       growthVector = new THREE.Vector3();
-      growthVector.subVectors(currentAperture, currentOrigin);
+      growthVector.copy(referenceLine);
+      growthVector.applyAxisAngle(phiDeviationAxis, this.genotype.phi);
 
-      // deviate growth vector from reference line
-
-      horizontalRotationAxis = new THREE.Vector3(0, 0, 1);
-      verticalRotationAxis = new THREE.Vector3(1, 0, 0);
-
-      growthVector.applyAxisAngle(horizontalRotationAxis, this.genotype.phi);
-      growthVector.applyAxisAngle(verticalRotationAxis, this.genotype.beta);
-
-      // multiply growth vector by translaction factor
+      referenceLine.normalize();
+      growthVector.applyAxisAngle(referenceLine, this.genotype.beta);
 
       growthVector.normalize();
       growthVector.multiplyScalar(this.genotype.translationFactor);
 
-      // calculate center of new chamber
-
       newCenter = new THREE.Vector3();
-      newCenter.copy(currentAperture);
+      newCenter.copy(this.prevChambers[0].aperture);
       newCenter.add(growthVector);
 
       return newCenter;
@@ -122,22 +154,24 @@ module Foram3D {
     }
 
     private calculateNewAperture(newChamber: Chamber) {
-      var newCenter, newChamberVertices, newAperture, currentDistance,
-          newDistance, chamber, contains, i, j;
+      var newCenter, newChamberVertices, prevAperture, newAperture,
+          currentDistance, newDistance, chamber, contains, i, j;
 
       newChamberVertices = newChamber.geometry.vertices;
 
+      prevAperture = this.prevChambers[0].aperture;
       newAperture = newChamberVertices[0];
-      currentDistance = newAperture.distanceTo(newChamber.center);
+
+      currentDistance = newAperture.distanceTo(prevAperture);
 
       for (i = 1; i < newChamberVertices.length; i++) {
-        newDistance = newChamberVertices[i].distanceTo(newChamber.center);
+        newDistance = newChamberVertices[i].distanceTo(prevAperture);
 
         if (newDistance < currentDistance) {
           contains = false;
 
           for (chamber of this.chambers) {
-            if (chamber.radius > newAperture.distanceTo(chamber.center)) {
+            if (chamber.radius >= newChamberVertices[i].distanceTo(chamber.center)) {
               contains = true;
               break;
             }
