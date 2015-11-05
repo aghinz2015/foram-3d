@@ -35,6 +35,7 @@
         "src/foram3d/genotype_params.ts",
         "src/foram3d/helpers/face.ts",
         "src/foram3d/simulation.ts",
+        "src/foram3d/helpers/point.ts",
         "typings/dat-gui/dat-gui.d.ts",
         "typings/threejs/three-objexporter.d.ts",
         "typings/threejs/three-trackballcontrols.d.ts",
