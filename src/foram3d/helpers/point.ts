@@ -3,7 +3,7 @@
 module Foram3D.Helpers {
   export interface PointParams {
     color?: number;
-    size?:  number
+    size?:  number;
   }
 
   export class Point extends THREE.Mesh {
