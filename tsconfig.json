@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "amd",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
+    ],
+    "files": [
+        "src/foram3d/centroids_line.ts",
+        "src/foram3d/chamber.ts",
+        "src/foram3d/configuration_params.ts",
+        "src/foram3d/configuration.ts",
+        "src/foram3d/foram.ts",
+        "src/foram3d/genotype_params.ts",
+        "src/foram3d/simulation.ts",
+        "typings/dat-gui/dat-gui.d.ts",
+        "typings/threejs/three-objexporter.d.ts",
+        "typings/threejs/three-trackballcontrols.d.ts",
+        "typings/threejs/three.d.ts",
+        "typings/tsd.d.ts"
+    ],
+    "compileOnSave": false
+}

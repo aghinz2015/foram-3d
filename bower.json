@@ -1,26 +1,24 @@
 {
   "name": "foram-3d",
-  "homepage": "https://github.com/aghinz2015/foram-3d",
+  "version": "1.1.0",
   "authors": [
-    "Bartosz Żurkowski"
+    "Bartosz Żurkowski <bartosz.zurkowski@codesthq.com>"
   ],
   "description": "Foram 3D visualization tool",
-  "main": "dist/js/foram_3d.js",
-  "dependencies": {
-    "threejs": "r72",
-    "threejs-obj-exporter": "~0.72.0",
-    "threejs-trackball-controls": "*",
-    "dat.gui": "*"
-  },
-  "devDependencies": {
-    "jquery": "~2.1.4"
-  },
+  "main": "build/js/foram3d.js",
   "license": "MIT",
+  "homepage": "https://github.com/aghinz2015/foram-3d",
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "threejs": "r72",
+    "threejs-obj-exporter": "~0.72.0",
+    "threejs-trackball-controls": "*",
+    "dat.gui": "*"
+  }
 }
