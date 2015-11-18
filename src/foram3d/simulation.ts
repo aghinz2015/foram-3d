@@ -1,6 +1,7 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
+/// <reference path="./centroids_path.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -9,7 +10,7 @@ module Foram3D {
 
     private foram: Foram;
 
-    private centroidsLine: CentroidsLine;
+    private centroidsPath: CentroidsPath;
     private thicknessVectorsVisible: boolean;
 
     private scene:    THREE.Scene;
@@ -49,8 +50,8 @@ module Foram3D {
 
       this.foram.evolve();
 
-      if (this.centroidsLine) {
-        this.centroidsLine.rebuild()
+      if (this.centroidsPath) {
+        this.centroidsPath.rebuild()
       }
 
       this.updateThicknessVectors();
@@ -61,22 +62,22 @@ module Foram3D {
 
       this.foram.regress();
 
-      if (this.centroidsLine) {
-        this.centroidsLine.rebuild()
+      if (this.centroidsPath) {
+        this.centroidsPath.rebuild()
       }
     }
 
-    toggleCentroidsLine() {
+    toggleCentroidsPath() {
       if (!this.foram) return;
 
-      if (!this.centroidsLine) {
-        this.centroidsLine = new CentroidsLine(this.foram);
-        this.centroidsLine.visible = false;
+      if (!this.centroidsPath) {
+        this.centroidsPath = new CentroidsPath(this.foram);
+        this.centroidsPath.visible = false;
 
-        this.scene.add(this.centroidsLine);
+        this.scene.add(this.centroidsPath);
       }
 
-      this.centroidsLine.visible = !this.centroidsLine.visible;
+      this.centroidsPath.visible = !this.centroidsPath.visible;
     }
 
     showThicknessVectors() {
@@ -132,13 +133,13 @@ module Foram3D {
       if (this.foram)
         this.scene.remove(this.foram);
 
-      if (this.centroidsLine)
-        this.scene.remove(this.centroidsLine);
+      if (this.centroidsPath)
+        this.scene.remove(this.centroidsPath);
 
       this.thicknessVectorsVisible = false;
 
       this.foram = null;
-      this.centroidsLine = null;
+      this.centroidsPath = null;
     }
 
     private setupScene() {
@@ -210,7 +211,7 @@ module Foram3D {
         simulate:         () => this.simulate(genotype, structureAnalyzer.numChambers),
         evolve:           () => this.evolve(),
         regress:          () => this.regress(),
-        centroidsLine:    () => this.toggleCentroidsLine(),
+        centroidsPath:    () => this.toggleCentroidsPath(),
         thicknessVectors: () => this.toggleThicknessVectors(),
         toggleChambers:   () => this.toggleChambers()
       }
@@ -229,7 +230,7 @@ module Foram3D {
       structureFolder.add(structureAnalyzer, 'simulate');
       structureFolder.add(structureAnalyzer, 'evolve');
       structureFolder.add(structureAnalyzer, 'regress');
-      structureFolder.add(structureAnalyzer, 'centroidsLine');
+      structureFolder.add(structureAnalyzer, 'centroidsPath');
       structureFolder.add(structureAnalyzer, 'thicknessVectors');
       structureFolder.add(structureAnalyzer, 'toggleChambers');
 

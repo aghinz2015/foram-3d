@@ -20,7 +20,7 @@
         "!node_modules/**"
     ],
     "files": [
-        "src/foram3d/centroids_line.ts",
+        "src/foram3d/centroids_path.ts",
         "src/foram3d/chamber_path.ts",
         "src/foram3d/chamber.ts",
         "src/foram3d/configuration_params.ts",
