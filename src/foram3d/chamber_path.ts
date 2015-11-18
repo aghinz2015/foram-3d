@@ -1,17 +1,31 @@
 /// <reference path="./foram.ts" />
 
 module Foram3D {
+  export interface ChamberPathParams {
+    color?: number;
+    width?: number;
+  }
+
   export abstract class ChamberPath extends THREE.Line {
     private static MAX_POINTS: number = 100;
 
+    private static DEFAULT_COLOR: number = 0xff0000;
+    private static DEFAULT_WIDTH: number = 10;
+
     foram: Foram;
+
+    color: number;
+    width: number;
 
     private positionsBuffer: THREE.BufferAttribute;
 
-    constructor(foram: Foram) {
+    constructor(foram: Foram, params?: ChamberPathParams) {
       this.foram = foram;
 
       this.positionsBuffer = this.buildPositionsBuffer();
+
+      this.color = params && params.color || ChamberPath.DEFAULT_COLOR;
+      this.width = params && params.width || ChamberPath.DEFAULT_WIDTH;
 
       var geometry = this.buildGeometry();
       var material = this.buildMaterial();
@@ -80,8 +94,8 @@ module Foram3D {
 
     private buildMaterial(): THREE.LineBasicMaterial {
       return new THREE.LineBasicMaterial({
-        color: 0xff0000,
-        linewidth: 10
+        color:     this.color,
+        linewidth: this.width
       });
     }
   }

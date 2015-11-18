@@ -81,7 +81,7 @@ module Foram3D {
       if (!this.foram) return;
 
       if (!this.centroidsPath) {
-        this.centroidsPath = new CentroidsPath(this.foram);
+        this.centroidsPath = new CentroidsPath(this.foram, { color: 0xff0000 });
         this.centroidsPath.visible = false;
 
         this.scene.add(this.centroidsPath);
@@ -94,7 +94,7 @@ module Foram3D {
       if (!this.foram) return;
 
       if (!this.aperturesPath) {
-        this.aperturesPath = new AperturesPath(this.foram);
+        this.aperturesPath = new AperturesPath(this.foram, { color: 0x00ff00 });
         this.aperturesPath.visible = false;
 
         this.scene.add(this.aperturesPath);
