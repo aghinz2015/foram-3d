@@ -40,7 +40,19 @@ module Foram3D {
       this.positionsBuffer.needsUpdate = true;
     }
 
-    protected filterActiveChambers(): Array<Chamber> {
+    protected fetchChambersAttribute(attributeName: string) {
+      var activeChambers, chamber, attributes = [];
+
+      activeChambers = this.filterActiveChambers();
+
+      for (chamber of activeChambers) {
+        attributes.push(chamber[attributeName]);
+      }
+
+      return attributes;
+    }
+
+    private filterActiveChambers(): Array<Chamber> {
       var chambers, chamber, activeChambers;
 
       chambers = this.foram.chambers;

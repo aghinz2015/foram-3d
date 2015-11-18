@@ -3,21 +3,8 @@
 module Foram3D {
   export class CentroidsPath extends ChamberPath {
     rebuild() {
-      var centroids = this.fetchChamberCentroids();
+      var centroids = this.fetchChambersAttribute("center");
       this.buildPath(centroids);
-    }
-
-    private fetchChamberCentroids(): Array<THREE.Vector3> {
-      var activeChambers, chamber, centroids;
-
-      activeChambers = this.filterActiveChambers();
-      centroids = [];
-
-      for (chamber of activeChambers) {
-        centroids.push(chamber.center);
-      }
-
-      return centroids;
     }
   }
 }
