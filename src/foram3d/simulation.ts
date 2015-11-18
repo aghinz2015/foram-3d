@@ -11,6 +11,8 @@ module Foram3D {
     private foram: Foram;
 
     private centroidsPath: CentroidsPath;
+    private aperturesPath: AperturesPath;
+
     private thicknessVectorsVisible: boolean;
 
     private scene:    THREE.Scene;
@@ -54,6 +56,10 @@ module Foram3D {
         this.centroidsPath.rebuild()
       }
 
+      if (this.aperturesPath) {
+        this.aperturesPath.rebuild()
+      }
+
       this.updateThicknessVectors();
     }
 
@@ -64,6 +70,10 @@ module Foram3D {
 
       if (this.centroidsPath) {
         this.centroidsPath.rebuild()
+      }
+
+      if (this.aperturesPath) {
+        this.aperturesPath.rebuild()
       }
     }
 
@@ -78,6 +88,19 @@ module Foram3D {
       }
 
       this.centroidsPath.visible = !this.centroidsPath.visible;
+    }
+
+    toggleAperturesPath() {
+      if (!this.foram) return;
+
+      if (!this.aperturesPath) {
+        this.aperturesPath = new AperturesPath(this.foram);
+        this.aperturesPath.visible = false;
+
+        this.scene.add(this.aperturesPath);
+      }
+
+      this.aperturesPath.visible = !this.aperturesPath.visible;
     }
 
     showThicknessVectors() {
@@ -136,10 +159,14 @@ module Foram3D {
       if (this.centroidsPath)
         this.scene.remove(this.centroidsPath);
 
+      if (this.aperturesPath)
+        this.scene.remove(this.aperturesPath);
+
       this.thicknessVectorsVisible = false;
 
       this.foram = null;
       this.centroidsPath = null;
+      this.aperturesPath = null;
     }
 
     private setupScene() {
@@ -212,6 +239,7 @@ module Foram3D {
         evolve:           () => this.evolve(),
         regress:          () => this.regress(),
         centroidsPath:    () => this.toggleCentroidsPath(),
+        aperturesPath:    () => this.toggleAperturesPath(),
         thicknessVectors: () => this.toggleThicknessVectors(),
         toggleChambers:   () => this.toggleChambers()
       }
@@ -231,6 +259,7 @@ module Foram3D {
       structureFolder.add(structureAnalyzer, 'evolve');
       structureFolder.add(structureAnalyzer, 'regress');
       structureFolder.add(structureAnalyzer, 'centroidsPath');
+      structureFolder.add(structureAnalyzer, 'aperturesPath');
       structureFolder.add(structureAnalyzer, 'thicknessVectors');
       structureFolder.add(structureAnalyzer, 'toggleChambers');
 
