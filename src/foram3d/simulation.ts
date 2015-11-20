@@ -2,6 +2,7 @@
 /// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
 /// <reference path="./centroids_path.ts"/>
+/// <reference path="./calculators/surface_calculator.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -75,6 +76,13 @@ module Foram3D {
       if (this.aperturesPath) {
         this.aperturesPath.rebuild()
       }
+    }
+
+    calculateSurfaceArea(): number {
+      if (!this.foram) return;
+
+      var surfaceCalculator = new Calculators.SurfaceCalculator(this.foram);
+      return surfaceCalculator.calculate();
     }
 
     toggleCentroidsPath() {
