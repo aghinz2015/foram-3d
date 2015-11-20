@@ -24,6 +24,7 @@
         "src/foram3d/calculators/calculator.ts",
         "src/foram3d/calculators/faces_processor.ts",
         "src/foram3d/calculators/surface_calculator.ts",
+        "src/foram3d/calculators/volume_calculator.ts",
         "src/foram3d/centroids_path.ts",
         "src/foram3d/chamber_path.ts",
         "src/foram3d/chamber.ts",

@@ -3,6 +3,7 @@
 /// <reference path="./genotype_params.ts"/>
 /// <reference path="./centroids_path.ts"/>
 /// <reference path="./calculators/surface_calculator.ts"/>
+/// <reference path="./calculators/volume_calculator.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -83,6 +84,13 @@ module Foram3D {
 
       var surfaceCalculator = new Calculators.SurfaceCalculator(this.foram);
       return surfaceCalculator.calculate();
+    }
+
+    calculateVolume(): number {
+      if (!this.foram) return;
+
+      var volumeCalculator = new Calculators.VolumeCalculator(this.foram);
+      return volumeCalculator.calculate();
     }
 
     toggleCentroidsPath() {
