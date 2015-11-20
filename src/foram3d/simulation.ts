@@ -138,7 +138,7 @@ module Foram3D {
       this.foram.material.opacity = opacity;
     }
 
-    exportToOBJ() {
+    exportToOBJ(): string {
       if (!this.foram) return;
 
       return new THREE.OBJExporter().parse(this.foram);

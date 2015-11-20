@@ -28,6 +28,7 @@
         "src/foram3d/configuration.ts",
         "src/foram3d/foram.ts",
         "src/foram3d/genotype_params.ts",
+        "src/foram3d/helpers/face.ts",
         "src/foram3d/simulation.ts",
         "typings/dat-gui/dat-gui.d.ts",
         "typings/threejs/three-objexporter.d.ts",
@@ -35,5 +36,8 @@
         "typings/threejs/three.d.ts",
         "typings/tsd.d.ts"
     ],
-    "compileOnSave": false
+    "compileOnSave": false,
+    "atom": {
+        "rewriteTsconfig": true
+    }
 }
