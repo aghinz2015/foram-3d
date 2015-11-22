@@ -4,6 +4,7 @@
 /// <reference path="./centroids_path.ts"/>
 /// <reference path="./calculators/surface_calculator.ts"/>
 /// <reference path="./calculators/volume_calculator.ts"/>
+/// <reference path="./calculators/shape_factor_calculator.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -82,15 +83,22 @@ module Foram3D {
     calculateSurfaceArea(): number {
       if (!this.foram) return;
 
-      var surfaceCalculator = new Calculators.SurfaceCalculator(this.foram);
-      return surfaceCalculator.calculate();
+      var calculator = new Calculators.SurfaceCalculator(this.foram);
+      return calculator.calculate();
     }
 
     calculateVolume(): number {
       if (!this.foram) return;
 
-      var volumeCalculator = new Calculators.VolumeCalculator(this.foram);
-      return volumeCalculator.calculate();
+      var calculator = new Calculators.VolumeCalculator(this.foram);
+      return calculator.calculate();
+    }
+
+    calculateShapeFactor(): number {
+      if (!this.foram) return;
+
+      var calculator = new Calculators.ShapeFactorCalculator(this.foram);
+      return calculator.calculate();
     }
 
     toggleCentroidsPath() {

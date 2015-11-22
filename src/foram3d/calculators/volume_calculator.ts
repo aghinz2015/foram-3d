@@ -18,7 +18,7 @@ module Foram3D.Calculators {
       v213 = face.vb.x * face.va.y * face.vc.z
       v123 = face.va.x * face.vb.y * face.vc.z
 
-      return (-v321 + v231 +v312 - v132 - v213 + v123) / 6
+      return (-v321 + v231 +v312 - v132 - v213 + v123) / 6;
     }
   }
 }
