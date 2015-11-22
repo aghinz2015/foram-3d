@@ -24,7 +24,7 @@ module Foram3D.Calculators {
       var activeChambers, prevChamber, chamber,
           totalLength;
 
-      activeChambers = this.foram.chambers;
+      activeChambers = this.foram.getActiveChambers();
 
       prevChamber = activeChambers[0];
       activeChambers.shift();

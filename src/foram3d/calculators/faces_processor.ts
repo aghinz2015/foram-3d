@@ -15,7 +15,7 @@ module Foram3D.Calculators {
           vertices, va, vb, vc,
           result;
 
-      chambers = this.foram.chambers;
+      chambers = this.foram.getActiveChambers();
       result   = 0;
 
       for (chamber of chambers) {

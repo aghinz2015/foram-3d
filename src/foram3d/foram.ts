@@ -53,6 +53,16 @@ module Foram3D {
       }
     }
 
+    getActiveChambers(): Array<Chamber> {
+      var chamber, activeChambers = [];
+
+      for (chamber of this.chambers) {
+        if (chamber.visible) activeChambers.push(chamber);
+      }
+
+      return activeChambers;
+    }
+
     private calculateNextChamber(): Chamber {
       var newCenter, newRadius, newThickness, newChamber, newAperture;
 

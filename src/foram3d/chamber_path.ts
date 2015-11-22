@@ -57,26 +57,13 @@ module Foram3D {
     protected fetchChambersAttribute(attributeName: string) {
       var activeChambers, chamber, attributes = [];
 
-      activeChambers = this.filterActiveChambers();
+      activeChambers = this.foram.getActiveChambers();
 
       for (chamber of activeChambers) {
         attributes.push(chamber[attributeName]);
       }
 
       return attributes;
-    }
-
-    private filterActiveChambers(): Array<Chamber> {
-      var chambers, chamber, activeChambers;
-
-      chambers = this.foram.chambers;
-      activeChambers = [];
-
-      for (chamber of chambers) {
-        if (chamber.visible) activeChambers.push(chamber);
-      }
-
-      return activeChambers;
     }
 
     private buildPositionsBuffer(): THREE.BufferAttribute {
