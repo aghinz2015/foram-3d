@@ -1,10 +1,11 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
-/// <reference path="./centroids_path.ts"/>
 /// <reference path="./calculators/surface_calculator.ts"/>
 /// <reference path="./calculators/volume_calculator.ts"/>
 /// <reference path="./calculators/shape_factor_calculator.ts"/>
+/// <reference path="./chamber_paths/centroids_path.ts"/>
+/// <reference path="./chamber_paths/apertures_path.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -13,8 +14,8 @@ module Foram3D {
 
     private foram: Foram;
 
-    private centroidsPath: CentroidsPath;
-    private aperturesPath: AperturesPath;
+    private centroidsPath: ChamberPaths.CentroidsPath;
+    private aperturesPath: ChamberPaths.AperturesPath;
 
     private thicknessVectorsVisible: boolean;
 
@@ -105,7 +106,7 @@ module Foram3D {
       if (!this.foram) return;
 
       if (!this.centroidsPath) {
-        this.centroidsPath = new CentroidsPath(this.foram, { color: 0xff0000 });
+        this.centroidsPath = new ChamberPaths.CentroidsPath(this.foram, { color: 0xff0000 });
         this.centroidsPath.visible = false;
 
         this.scene.add(this.centroidsPath);
@@ -118,7 +119,7 @@ module Foram3D {
       if (!this.foram) return;
 
       if (!this.aperturesPath) {
-        this.aperturesPath = new AperturesPath(this.foram, { color: 0x00ff00 });
+        this.aperturesPath = new ChamberPaths.AperturesPath(this.foram, { color: 0x00ff00 });
         this.aperturesPath.visible = false;
 
         this.scene.add(this.aperturesPath);

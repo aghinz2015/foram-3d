@@ -1,6 +1,6 @@
-/// <reference path="./foram.ts" />
+/// <reference path="../foram.ts" />
 
-module Foram3D {
+module Foram3D.ChamberPaths {
   export interface ChamberPathParams {
     color?: number;
     width?: number;
