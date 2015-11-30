@@ -1,6 +1,11 @@
 /// <reference path="../../typings/threejs/three.d.ts" />
 
 module Foram3D {
+  export interface ChamberParams {
+    radius:    number;
+    thickness: number;
+  }
+
   export class Chamber extends THREE.Mesh {
     private static WIDTH_SEGMENTS:  number = 32;
     private static HEIGHT_SEGMENTS: number = 32;
@@ -50,6 +55,13 @@ module Foram3D {
       if (this.thicknessVector) {
         this.thicknessVector.visible = false;
       }
+    }
+
+    serialize(): ChamberParams {
+      return {
+        radius:    this.radius,
+        thickness: this.thickness
+      };
     }
 
     private buildGeometry(): THREE.Geometry {

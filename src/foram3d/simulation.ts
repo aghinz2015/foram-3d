@@ -19,6 +19,9 @@ module Foram3D {
 
     private thicknessVectorsVisible: boolean;
 
+    private _onChamberClick: (event: Event, chamber: ChamberParams) => void;
+    private _onChamberHover: (event: Event, chamber: ChamberParams) => void;
+
     private scene:    THREE.Scene;
     private camera:   THREE.PerspectiveCamera;
     private renderer: THREE.WebGLRenderer;
@@ -35,6 +38,7 @@ module Foram3D {
 
       this.setupScene();
       this.setupControls();
+      this.setupMouseEvents();
       this.setupAutoResize();
 
       if (this.configuration.dev) {
@@ -169,6 +173,14 @@ module Foram3D {
       return new THREE.OBJExporter().parse(this.foram);
     }
 
+    onChamberClick(onChamberClick: (event: Event, chamber: ChamberParams) => void) {
+      this._onChamberClick = onChamberClick;
+    }
+
+    onChamberHover(onChamberHover: (event: Event, chamber: ChamberParams) => void) {
+      this._onChamberHover = onChamberHover;
+    }
+
     private updateThicknessVectors() {
       if (this.thicknessVectorsVisible) {
         this.showThicknessVectors();
@@ -239,6 +251,11 @@ module Foram3D {
       ]
     }
 
+    private setupMouseEvents() {
+      this.renderer.domElement.addEventListener('click', (event: Event) => this.onMouseClick(event));
+      this.renderer.domElement.addEventListener('mousemove', (event: Event) => this.onMouseMove(event));
+    }
+
     private setupAutoResize() {
       window.addEventListener('resize', () => this.resize());
     }
@@ -291,6 +308,48 @@ module Foram3D {
       materialFolder.add(materialOptions, 'opacity').onFinishChange(
         () => this.applyOpacity(materialOptions.opacity)
       );
+    }
+
+    private onMouseClick(event) {
+      event.preventDefault();
+
+      if (this._onChamberClick) {
+        var chamber = this.getPointedChamber(event);
+
+        if (chamber) {
+          this._onChamberClick(event, chamber);
+        }
+      }
+    }
+
+    private onMouseMove(event) {
+      event.preventDefault();
+
+      if (this._onChamberHover) {
+        var chamber = this.getPointedChamber(event);
+
+        if (chamber) {
+          this._onChamberHover(event, chamber);
+        }
+      }
+    }
+
+    private getPointedChamber(event): Chamber {
+      if (!this.foram) return;
+
+      var raycaster = new THREE.Raycaster();
+      var mouse = new THREE.Vector2();
+
+      mouse.x = (event.clientX / this.renderer.domElement.clientWidth) * 2 - 1;
+      mouse.y = -(event.clientY / this.renderer.domElement.clientHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, this.camera);
+
+      var intersects = raycaster.intersectObjects(this.foram.chambers);
+
+      if (intersects.length > 0) {
+        return <Chamber> intersects[0].object
+      }
     }
 
     private resize() {

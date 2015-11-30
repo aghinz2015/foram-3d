@@ -25,7 +25,18 @@
       var canvas, configuration, simulation;
 
       canvas = document.getElementById('canvas');
+
       simulation = new Foram3D.Simulation(canvas, { dev: true });
+
+      simulation.onChamberClick(function(event, chamber) {
+        console.log("radius: ",    chamber.radius);
+        console.log("thickness: ", chamber.thickness);
+      });
+
+      // simulation.onChamberHover(function(event, chamber) {
+      //   console.log("radius: ",    chamber.radius);
+      //   console.log("thickness: ", chamber.thickness);
+      // });
     </script>
   </body>
 </html>
