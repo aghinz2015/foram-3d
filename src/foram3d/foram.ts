@@ -114,15 +114,11 @@ module Foram3D {
     }
 
     private calculateNewRadius(): number {
-      return this.ancestorOrCurrentChamber().radius * this.genotype.growthFactor;
+      return this.currentChamber.radius * this.genotype.growthFactor;
     }
 
     private calculateNewThickness(): number {
-      return this.ancestorOrCurrentChamber().thickness * this.genotype.wallThicknessFactor;
-    }
-
-    private ancestorOrCurrentChamber(): Chamber {
-      return this.currentChamber.ancestor || this.currentChamber
+      return this.currentChamber.thickness * this.genotype.wallThicknessFactor;
     }
 
     private calculateNewAperture(newChamber: Chamber) {
