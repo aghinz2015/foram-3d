@@ -10,7 +10,7 @@ module Foram3D.ChamberPaths {
     private static MAX_POINTS: number = 100;
 
     private static DEFAULT_COLOR: number = 0xff0000;
-    private static DEFAULT_WIDTH: number = 10;
+    private static DEFAULT_WIDTH: number = 3;
 
     foram: Foram;
 

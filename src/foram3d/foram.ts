@@ -102,7 +102,7 @@ module Foram3D {
         referenceLine.subVectors(
           this.prevChambers[0].aperture,
           this.prevChambers[1].aperture
-        )
+        );
       }
 
       deviationSurfaceSpanning = new THREE.Vector3();
