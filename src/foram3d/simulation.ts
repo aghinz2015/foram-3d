@@ -209,7 +209,10 @@ module Foram3D {
     private setupScene() {
       this.scene = new THREE.Scene();
 
-      this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      var width  = this.canvas.clientWidth;
+      var height = this.canvas.clientHeight;
+
+      this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
       this.camera.position.set(0, 0, 70);
       this.scene.add(this.camera);
 
@@ -222,7 +225,7 @@ module Foram3D {
       });
 
       this.renderer.setClearColor(0x111111, 1);
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setSize(width, height);
 
       this.canvas.appendChild(this.renderer.domElement);
     }
@@ -353,10 +356,13 @@ module Foram3D {
     }
 
     private resize() {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
+      var width  = this.canvas.clientWidth;
+      var height = this.canvas.clientHeight;
+
+      this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
+      this.renderer.setSize(width, height);
     }
 
     private animate() {
