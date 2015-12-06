@@ -1,6 +1,9 @@
 /// <reference path="../../typings/threejs/three.d.ts" />
 /// <reference path="./chamber.ts" />
 /// <reference path="./genotype_params.ts"/>
+/// <reference path="./calculators/surface_calculator.ts"/>
+/// <reference path="./calculators/volume_calculator.ts"/>
+/// <reference path="./calculators/shape_factor_calculator.ts"/>
 
 module Foram3D {
   export class Foram extends THREE.Object3D {
@@ -55,6 +58,21 @@ module Foram3D {
         this.currentChamber.visible = false;
         this.currentChamber = ancestor;
       }
+    }
+
+    calculateSurfaceArea(): number {
+      var calculator = new Calculators.SurfaceCalculator(this);
+      return calculator.calculate();
+    }
+
+    calculateVolume(): number {
+      var calculator = new Calculators.VolumeCalculator(this);
+      return calculator.calculate();
+    }
+
+    calculateShapeFactor(): number {
+      var calculator = new Calculators.ShapeFactorCalculator(this);
+      return calculator.calculate();
     }
 
     getActiveChambers(): Array<Chamber> {

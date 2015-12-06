@@ -1,9 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
-/// <reference path="./calculators/surface_calculator.ts"/>
-/// <reference path="./calculators/volume_calculator.ts"/>
-/// <reference path="./calculators/shape_factor_calculator.ts"/>
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
 
@@ -88,22 +85,19 @@ module Foram3D {
     calculateSurfaceArea(): number {
       if (!this.foram) return;
 
-      var calculator = new Calculators.SurfaceCalculator(this.foram);
-      return calculator.calculate();
+      return this.foram.calculateSurfaceArea();
     }
 
     calculateVolume(): number {
       if (!this.foram) return;
 
-      var calculator = new Calculators.VolumeCalculator(this.foram);
-      return calculator.calculate();
+      return this.foram.calculateVolume();
     }
 
     calculateShapeFactor(): number {
       if (!this.foram) return;
 
-      var calculator = new Calculators.ShapeFactorCalculator(this.foram);
-      return calculator.calculate();
+      return this.foram.calculateShapeFactor();
     }
 
     toggleCentroidsPath() {
