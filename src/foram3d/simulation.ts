@@ -167,6 +167,12 @@ module Foram3D {
       return new THREE.OBJExporter().parse(this.foram);
     }
 
+    exportToCSV(): string {
+      if (!this.foram) return;
+
+      return new Export.CSVExporter().parse(this.foram);
+    }
+
     onChamberClick(onChamberClick: (event: Event, chamber: ChamberParams) => void) {
       this._onChamberClick = onChamberClick;
     }
