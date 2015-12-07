@@ -212,7 +212,7 @@ module Foram3D {
       var width  = this.canvas.clientWidth;
       var height = this.canvas.clientHeight;
 
-      this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
       this.camera.position.set(0, 0, 70);
       this.scene.add(this.camera);
 
