@@ -216,7 +216,7 @@ module Foram3D {
       this.camera.position.set(0, 0, 70);
       this.scene.add(this.camera);
 
-      this.lighting = new THREE.SpotLight(0xffffff);
+      this.lighting = new THREE.DirectionalLight(0xffffff, 0.9);
       this.camera.add(this.lighting);
 
       this.renderer = new THREE.WebGLRenderer({
@@ -224,7 +224,7 @@ module Foram3D {
         antialias: true
       });
 
-      this.renderer.setClearColor(0x111111, 1);
+      this.renderer.setClearColor(0x000000, 1);
       this.renderer.setSize(width, height);
 
       this.canvas.appendChild(this.renderer.domElement);
