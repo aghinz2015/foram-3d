@@ -1,6 +1,6 @@
 {
   "name": "foram-3d",
-  "version": "1.1.0",
+  "version": "1.2.4",
   "description": "Foram 3D visualisation tool",
   "main": "foram3d.js",
   "scripts": {
