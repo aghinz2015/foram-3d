@@ -6,10 +6,10 @@
 /// <reference path="./calculators/shape_factor_calculator.ts"/>
 
 module Foram3D {
-  export class Foram extends THREE.Object3D {
+  export class Foram extends THREE.Group {
     private static INITIAL_RADIUS:    number = 5;
     private static INITIAL_THICKNESS: number = 1;
-    private static INITIAL_OPACITY:   number = 0.5;
+    private static INITIAL_OPACITY:   number = 0.8;
 
     genotype: GenotypeParams;
     chambers: Array<Chamber>;

@@ -28,9 +28,9 @@ declare module THREE {
         maxDistance:number;
         keys:number[];
 
-        position0: THREE.Vector3;
-        target0: THREE.Vector3;
-        up0: THREE.Vector3;
+        position: THREE.Vector3;
+        target: THREE.Vector3;
+        up: THREE.Vector3;
 
         update():void;
         reset():void;

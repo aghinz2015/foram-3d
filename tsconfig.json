@@ -31,6 +31,7 @@
         "src/foram3d/chamber.ts",
         "src/foram3d/configuration_params.ts",
         "src/foram3d/configuration.ts",
+        "src/foram3d/controls/target_controls.ts",
         "src/foram3d/export/csv_exporter.ts",
         "src/foram3d/export/exporter.ts",
         "src/foram3d/foram.ts",

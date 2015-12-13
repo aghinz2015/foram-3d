@@ -3,6 +3,7 @@
 /// <reference path="./genotype_params.ts"/>
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
+/// <reference path="./controls/target_controls.ts"/>
 
 module Foram3D {
   export class Simulation {
@@ -27,6 +28,8 @@ module Foram3D {
     private gui: dat.GUI;
     private controls: THREE.TrackballControls;
 
+    private targetControls: Controls.TargetControls;
+
     constructor(canvas: HTMLElement, configParams?: ConfigurationParams) {
       this.canvas = canvas;
       this.configuration = new Configuration(configParams);
@@ -35,6 +38,7 @@ module Foram3D {
 
       this.setupScene();
       this.setupControls();
+      this.setupTargetControls();
       this.setupMouseEvents();
       this.setupAutoResize();
 
@@ -49,6 +53,9 @@ module Foram3D {
       this.reset();
 
       this.foram = new Foram(genotype, numChambers);
+
+      this.fitTarget();
+
       this.scene.add(this.foram);
     }
 
@@ -181,6 +188,12 @@ module Foram3D {
       this._onChamberHover = onChamberHover;
     }
 
+    fitTarget() {
+      if (!this.foram) return;
+
+      this.targetControls.fitTarget(this.foram);
+    }
+
     private updateThicknessVectors() {
       if (this.thicknessVectorsVisible) {
         this.showThicknessVectors();
@@ -254,6 +267,10 @@ module Foram3D {
       ]
     }
 
+    private setupTargetControls() {
+      this.targetControls = new Controls.TargetControls(this.camera, this.controls);
+    }
+
     private setupMouseEvents() {
       this.renderer.domElement.addEventListener('click', (event: Event) => this.onMouseClick(event));
       this.renderer.domElement.addEventListener('mousemove', (event: Event) => this.onMouseMove(event));
@@ -286,7 +303,8 @@ module Foram3D {
         centroidsPath:    () => this.toggleCentroidsPath(),
         aperturesPath:    () => this.toggleAperturesPath(),
         thicknessVectors: () => this.toggleThicknessVectors(),
-        toggleChambers:   () => this.toggleChambers()
+        toggleChambers:   () => this.toggleChambers(),
+        fitTarget:        () => this.fitTarget()
       }
 
       var materialOptions = {
@@ -307,6 +325,7 @@ module Foram3D {
       structureFolder.add(structureAnalyzer, 'aperturesPath');
       structureFolder.add(structureAnalyzer, 'thicknessVectors');
       structureFolder.add(structureAnalyzer, 'toggleChambers');
+      structureFolder.add(structureAnalyzer, 'fitTarget');
 
       materialFolder.add(materialOptions, 'opacity').onFinishChange(
         () => this.applyOpacity(materialOptions.opacity)
