@@ -85,6 +85,10 @@ module Foram3D {
       return activeChambers;
     }
 
+    applyOpacity(opacity: number) {
+      this.material.opacity = opacity;
+    }
+
     private calculateNextChamber(): Chamber {
       var newCenter, newRadius, newThickness, newChamber, newAperture;
 

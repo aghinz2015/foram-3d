@@ -165,7 +165,7 @@ module Foram3D {
     applyOpacity(opacity: number) {
       if (!this.foram) return;
 
-      this.foram.material.opacity = opacity;
+      this.foram.applyOpacity(opacity);
     }
 
     exportToOBJ(): string {
@@ -308,7 +308,7 @@ module Foram3D {
       }
 
       var materialOptions = {
-        opacity: 0.5
+        opacity: 0.8
       }
 
       genotypeFolder.add(genotype, 'phi').step(0.01);
