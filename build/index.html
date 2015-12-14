@@ -34,8 +34,7 @@
       simulation = new Foram3D.Simulation(canvas, { dev: true });
 
       simulation.onChamberClick(function(event, chamber) {
-        console.log("radius: ",    chamber.radius);
-        console.log("thickness: ", chamber.thickness);
+        console.log(chamber);
       });
 
       // simulation.onChamberHover(function(event, chamber) {

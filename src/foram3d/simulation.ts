@@ -346,7 +346,7 @@ module Foram3D {
         var chamber = this.getPointedChamber(event);
 
         if (chamber) {
-          this._onChamberClick(event, chamber);
+          this._onChamberClick(event, chamber.serialize());
         }
       }
     }
@@ -358,7 +358,7 @@ module Foram3D {
         var chamber = this.getPointedChamber(event);
 
         if (chamber) {
-          this._onChamberHover(event, chamber);
+          this._onChamberHover(event, chamber.serialize());
         }
       }
     }
