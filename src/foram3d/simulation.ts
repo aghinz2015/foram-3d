@@ -180,6 +180,13 @@ module Foram3D {
       return new Export.CSVExporter().parse(this.foram);
     }
 
+    takeScreenshot(mimetype?: string) {
+      var mimetype = mimetype || "image/jpeg";
+
+      this.render();
+      return this.renderer.domElement.toDataURL(mimetype);
+    }
+
     onChamberClick(onChamberClick: (event: Event, chamber: ChamberParams) => void) {
       this._onChamberClick = onChamberClick;
     }
