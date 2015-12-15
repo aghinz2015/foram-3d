@@ -7,8 +7,10 @@ module Foram3D.Helpers {
   }
 
   export class Line extends THREE.Line {
-    private static DEFAULT_COLOR:  number = 0xff0000;
-    private static DEFAULT_LENGTH: number = 2.5;
+    private static DEFAULT_PARAMS: LineParams = {
+      color:   0xff0000,
+      length:  2.5
+    };
 
     start: THREE.Vector3;
     end:   THREE.Vector3;
@@ -16,12 +18,11 @@ module Foram3D.Helpers {
     color:  number;
     length: number;
 
-    constructor(start: THREE.Vector3, end: THREE.Vector3, params: LineParams) {
+    constructor(start: THREE.Vector3, end: THREE.Vector3, params?: LineParams) {
       this.start = start;
       this.end = end;
 
-      this.color  = params.color  || Line.DEFAULT_COLOR;
-      this.length = params.length || Line.DEFAULT_LENGTH;
+      Helpers.extend(this, params, Line.DEFAULT_PARAMS);
 
       var geometry = this.buildGeometry();
       var material = this.buildMaterial();

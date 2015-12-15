@@ -7,20 +7,21 @@ module Foram3D.Helpers {
   }
 
   export class Point extends THREE.Mesh {
-    private static DEFAULT_SIZE:  number = 0.3;
-    private static DEFAULT_COLOR: number = 0xff0000;
-
     private static WIDTH_SEGMENTS:  number = 32;
     private static HEIGHT_SEGMENTS: number = 32;
+
+    private static DEFAULT_PARAMS: PointParams = {
+      color: 0xff0000,
+      size:  0.3
+    };
 
     position: THREE.Vector3;
 
     size:  number;
     color: number;
 
-    constructor(position: THREE.Vector3, params: PointParams) {
-      this.color = params.color || Point.DEFAULT_COLOR;
-      this.size  = params.size  || Point.DEFAULT_SIZE;
+    constructor(position: THREE.Vector3, params?: PointParams) {
+      Helpers.extend(this, params, Point.DEFAULT_PARAMS);
 
       var geometry = this.buildGeometry();
       var material = this.buildMaterial();

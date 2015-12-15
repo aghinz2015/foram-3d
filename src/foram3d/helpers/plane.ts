@@ -2,32 +2,35 @@
 
 module Foram3D.Helpers {
   export interface PlaneParams {
-    color?: number;
-    size?:  number;
+    color?:   number;
+    size?:    number;
+    opacity?: number;
   }
 
   export class Plane extends THREE.Mesh {
-    private static DEFAULT_COLOR:   number = 0xff0000;
-    private static DEFAULT_SIZE:    number = 10;
-    private static DEFAULT_OPACITY: number = 0.3;
+    private static DEFAULT_PARAMS: PlaneParams = {
+      color:   0xff0000,
+      size:    10,
+      opacity: 0.3
+    };
 
     position: THREE.Vector3;
 
     spanningVector1: THREE.Vector3;
     spanningVector2: THREE.Vector3;
 
-    color: number;
-    size:  number;
+    color:   number;
+    size:    number;
+    opacity: number;
 
     constructor(position: THREE.Vector3, spanningVector1: THREE.Vector3,
-                spanningVector2: THREE.Vector3, params: PlaneParams) {
+                spanningVector2: THREE.Vector3, params?: PlaneParams) {
       this.position = new THREE.Vector3().copy(position);
 
       this.spanningVector1 = new THREE.Vector3().copy(spanningVector1);
       this.spanningVector2 = new THREE.Vector3().copy(spanningVector2);
 
-      this.color = params.color || Plane.DEFAULT_COLOR;
-      this.size  = params.size  || Plane.DEFAULT_SIZE;
+      Helpers.extend(this, params, Plane.DEFAULT_PARAMS);
 
       this.normalizeSpanningVectors();
 
@@ -74,7 +77,7 @@ module Foram3D.Helpers {
         side:        THREE.DoubleSide,
         color:       this.color,
         transparent: true,
-        opacity:     Plane.DEFAULT_OPACITY
+        opacity:     this.opacity
       });
     }
   }
