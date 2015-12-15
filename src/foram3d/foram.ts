@@ -99,7 +99,7 @@ module Foram3D {
       newChamber = this.buildChamber(newCenter, newRadius, newThickness);
       newAperture = this.calculateNewAperture(newChamber);
 
-      newChamber.aperture = newAperture;
+      newChamber.setAperture(newAperture);
       newChamber.setAncestor(this.currentChamber);
 
       this.prevChambers[2] = this.prevChambers[1];
@@ -215,6 +215,8 @@ module Foram3D {
         Foram.INITIAL_RADIUS,
         Foram.INITIAL_THICKNESS
       );
+
+      initialChamber.markAperture();
 
       this.add(initialChamber);
 

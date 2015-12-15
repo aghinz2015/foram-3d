@@ -10,6 +10,9 @@ module Foram3D {
     private static WIDTH_SEGMENTS:  number = 32;
     private static HEIGHT_SEGMENTS: number = 32;
 
+    private static APERTURE_MARKER_COLOR:       number = 0x000000;
+    private static APERTURE_MARKER_SIZE_FACTOR: number = 0.05;
+
     center:   THREE.Vector3;
     origin:   THREE.Vector3;
     aperture: THREE.Vector3;
@@ -21,6 +24,7 @@ module Foram3D {
     child:    Chamber;
 
     thicknessVector: THREE.ArrowHelper;
+    apertureMarker:  Helpers.Point;
 
     constructor(center: THREE.Vector3, radius: number, thickness: number) {
       this.center = center;
@@ -42,6 +46,11 @@ module Foram3D {
       newAncestor.child = this;
     }
 
+    setAperture(aperture: THREE.Vector3) {
+      this.aperture = aperture;
+      this.markAperture();
+    }
+
     showThicknessVector() {
       if (!this.thicknessVector) {
         this.thicknessVector = this.buildThicknessVector();
@@ -57,11 +66,25 @@ module Foram3D {
       }
     }
 
+    markAperture() {
+      this.apertureMarker = this.buildApertureMarker();
+      this.add(this.apertureMarker);
+    }
+
     serialize(): ChamberParams {
       return {
         radius:    this.radius,
         thickness: this.thickness
       };
+    }
+
+    private buildApertureMarker() {
+      var markerParams = {
+        color: Chamber.APERTURE_MARKER_COLOR,
+        size:  this.radius * Chamber.APERTURE_MARKER_SIZE_FACTOR
+      };
+
+      return new Helpers.Point(this.aperture, markerParams);
     }
 
     private buildGeometry(): THREE.Geometry {
