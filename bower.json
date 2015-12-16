@@ -1,8 +1,8 @@
 {
   "name": "foram-3d",
-  "version": "1.2.4",
+  "version": "1.2.6",
   "authors": [
-    "Bartosz Żurkowski <bartosz.zurkowski@codesthq.com>"
+    "Bartosz Żurkowski"
   ],
   "description": "Foram 3D visualization tool",
   "main": "build/js/foram3d.js",
