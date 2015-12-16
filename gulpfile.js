@@ -72,7 +72,7 @@ gulp.task('watch', ['wiredep'], function() {
 
 gulp.task('connect', function() {
   connect.server({
-    port: 3000,
+    port: 4000,
     root: 'build/',
   });
 });
