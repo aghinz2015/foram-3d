@@ -157,14 +157,19 @@ module Foram3D {
       referenceLine.normalize();
       growthVector.applyAxisAngle(referenceLine, this.genotype.beta);
 
-      growthVector.normalize();
-      growthVector.multiplyScalar(this.genotype.translationFactor);
+      var growthVectorLength = this.calculateGrowthVectorLength();
+
+      growthVector.setLength(growthVectorLength);
 
       newCenter = new THREE.Vector3();
       newCenter.copy(this.prevChambers[0].aperture);
       newCenter.add(growthVector);
 
       return newCenter;
+    }
+
+    private calculateGrowthVectorLength(): number {
+      return this.currentChamber.radius * this.genotype.translationFactor;
     }
 
     private calculateNewRadius(): number {
