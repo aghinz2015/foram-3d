@@ -1,8 +1,6 @@
 /// <reference path="../../typings/tsd.d.ts" />
 /// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
-/// <reference path="./chamber_paths/centroids_path.ts"/>
-/// <reference path="./chamber_paths/apertures_path.ts"/>
 /// <reference path="./controls/target_controls.ts"/>
 /// <reference path="./helpers/utils.ts"/>
 
@@ -16,9 +14,6 @@ module Foram3D {
     config: SimulationParams;
 
     private foram: Foram;
-
-    private centroidsPath: ChamberPaths.CentroidsPath;
-    private aperturesPath: ChamberPaths.AperturesPath;
 
     private thicknessVectorsVisible: boolean;
 
@@ -75,14 +70,6 @@ module Foram3D {
 
       this.foram.evolve();
 
-      if (this.centroidsPath) {
-        this.centroidsPath.rebuild()
-      }
-
-      if (this.aperturesPath) {
-        this.aperturesPath.rebuild()
-      }
-
       this.updateThicknessVectors();
     }
 
@@ -90,14 +77,18 @@ module Foram3D {
       if (!this.foram) return;
 
       this.foram.regress();
+    }
 
-      if (this.centroidsPath) {
-        this.centroidsPath.rebuild()
-      }
+    toggleCentroidsPath() {
+      if (!this.foram) return;
 
-      if (this.aperturesPath) {
-        this.aperturesPath.rebuild()
-      }
+      this.foram.toggleCentroidsPath();
+    }
+
+    toggleAperturesPath() {
+      if (!this.foram) return;
+
+      this.foram.toggleAperturesPath();
     }
 
     calculateSurfaceArea(): number {
@@ -116,32 +107,6 @@ module Foram3D {
       if (!this.foram) return;
 
       return this.foram.calculateShapeFactor();
-    }
-
-    toggleCentroidsPath() {
-      if (!this.foram) return;
-
-      if (!this.centroidsPath) {
-        this.centroidsPath = new ChamberPaths.CentroidsPath(this.foram, { color: 0xff0000 });
-        this.centroidsPath.visible = false;
-
-        this.scene.add(this.centroidsPath);
-      }
-
-      this.centroidsPath.visible = !this.centroidsPath.visible;
-    }
-
-    toggleAperturesPath() {
-      if (!this.foram) return;
-
-      if (!this.aperturesPath) {
-        this.aperturesPath = new ChamberPaths.AperturesPath(this.foram, { color: 0x00ff00 });
-        this.aperturesPath.visible = false;
-
-        this.scene.add(this.aperturesPath);
-      }
-
-      this.aperturesPath.visible = !this.aperturesPath.visible;
     }
 
     showThicknessVectors() {
@@ -224,17 +189,9 @@ module Foram3D {
       if (this.foram)
         this.scene.remove(this.foram);
 
-      if (this.centroidsPath)
-        this.scene.remove(this.centroidsPath);
-
-      if (this.aperturesPath)
-        this.scene.remove(this.aperturesPath);
-
       this.thicknessVectorsVisible = false;
 
       this.foram = null;
-      this.centroidsPath = null;
-      this.aperturesPath = null;
     }
 
     private setupScene() {

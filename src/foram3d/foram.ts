@@ -1,6 +1,8 @@
 /// <reference path="../../typings/threejs/three.d.ts" />
 /// <reference path="./chamber.ts" />
 /// <reference path="./genotype_params.ts"/>
+/// <reference path="./chamber_paths/centroids_path.ts"/>
+/// <reference path="./chamber_paths/apertures_path.ts"/>
 /// <reference path="./calculators/surface_calculator.ts"/>
 /// <reference path="./calculators/volume_calculator.ts"/>
 /// <reference path="./calculators/shape_factor_calculator.ts"/>
@@ -18,6 +20,9 @@ module Foram3D {
 
     private currentChamber: Chamber;
     private prevChambers: Array<Chamber> = [];
+
+    private centroidsPath: ChamberPaths.CentroidsPath;
+    private aperturesPath: ChamberPaths.AperturesPath;
 
     constructor(genotype: GenotypeParams, numChambers: number) {
       super();
@@ -49,6 +54,8 @@ module Foram3D {
         this.currentChamber = newChamber;
         this.add(newChamber);
       }
+
+      this.updateChamberPaths();
     }
 
     regress() {
@@ -58,6 +65,30 @@ module Foram3D {
         this.currentChamber.visible = false;
         this.currentChamber = ancestor;
       }
+
+      this.updateChamberPaths();
+    }
+
+    toggleCentroidsPath() {
+      if (!this.centroidsPath) {
+        this.centroidsPath = new ChamberPaths.CentroidsPath(this, { color: 0xff0000 });
+        this.centroidsPath.visible = false;
+
+        this.add(this.centroidsPath);
+      }
+
+      this.centroidsPath.visible = !this.centroidsPath.visible;
+    }
+
+    toggleAperturesPath() {
+      if (!this.aperturesPath) {
+        this.aperturesPath = new ChamberPaths.AperturesPath(this, { color: 0x00ff00 });
+        this.aperturesPath.visible = false;
+
+        this.add(this.aperturesPath);
+      }
+
+      this.aperturesPath.visible = !this.aperturesPath.visible;
     }
 
     calculateSurfaceArea(): number {
@@ -241,6 +272,16 @@ module Foram3D {
         transparent: true,
         opacity: Foram.INITIAL_OPACITY
       });
+    }
+
+    private updateChamberPaths() {
+      if (this.centroidsPath) {
+        this.centroidsPath.rebuild()
+      }
+
+      if (this.aperturesPath) {
+        this.aperturesPath.rebuild()
+      }
     }
   }
 }
