@@ -1,5 +1,5 @@
 module Foram3D {
-  export interface GenotypeParams {
+  export interface Genotype {
     phi:                 number;
     beta:                number;
     translationFactor:   number;

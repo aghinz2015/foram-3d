@@ -1,6 +1,6 @@
 /// <reference path="../../typings/threejs/three.d.ts" />
 /// <reference path="./chamber.ts" />
-/// <reference path="./genotype_params.ts"/>
+/// <reference path="./genotype.ts"/>
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
 /// <reference path="./calculators/surface_calculator.ts"/>
@@ -13,7 +13,7 @@ module Foram3D {
     private static INITIAL_THICKNESS: number = 1;
     private static INITIAL_OPACITY:   number = 0.8;
 
-    genotype: GenotypeParams;
+    genotype: Genotype;
     chambers: Array<Chamber>;
 
     material: THREE.Material;
@@ -26,7 +26,7 @@ module Foram3D {
 
     private thicknessVectorsVisible: boolean;
 
-    constructor(genotype: GenotypeParams, numChambers: number) {
+    constructor(genotype: Genotype, numChambers: number) {
       super();
 
       this.genotype = genotype;

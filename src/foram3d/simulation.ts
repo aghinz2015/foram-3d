@@ -1,5 +1,5 @@
 /// <reference path="../../typings/tsd.d.ts" />
-/// <reference path="./genotype_params.ts"/>
+/// <reference path="./genotype.ts"/>
 /// <reference path="./foram.ts"/>
 /// <reference path="./simulation_gui.ts"/>
 /// <reference path="./controls/target_controls.ts"/>
@@ -52,7 +52,7 @@ module Foram3D {
       this.animate();
     }
 
-    simulate(genotype: GenotypeParams, numChambers: number) {
+    simulate(genotype: Genotype, numChambers: number) {
       this.reset();
 
       this.foram = new Foram(genotype, numChambers);
