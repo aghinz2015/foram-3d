@@ -109,10 +109,6 @@ module Foram3D {
       this.foram.toggleThicknessVectors();
     }
 
-    toggleChambers() {
-      this.foram.visible = !this.foram.visible;
-    }
-
     applyOpacity(opacity: number) {
       if (!this.foram) return;
 
@@ -243,7 +239,6 @@ module Foram3D {
         centroidsPath:    () => this.toggleCentroidsPath(),
         aperturesPath:    () => this.toggleAperturesPath(),
         thicknessVectors: () => this.toggleThicknessVectors(),
-        toggleChambers:   () => this.toggleChambers(),
         fitTarget:        () => this.fitTarget()
       }
 
@@ -264,7 +259,6 @@ module Foram3D {
       structureFolder.add(structureAnalyzer, 'centroidsPath');
       structureFolder.add(structureAnalyzer, 'aperturesPath');
       structureFolder.add(structureAnalyzer, 'thicknessVectors');
-      structureFolder.add(structureAnalyzer, 'toggleChambers');
       structureFolder.add(structureAnalyzer, 'fitTarget');
 
       materialFolder.add(materialOptions, 'opacity').onFinishChange(
