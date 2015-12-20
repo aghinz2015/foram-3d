@@ -1,6 +1,7 @@
 /// <reference path="../../typings/tsd.d.ts" />
-/// <reference path="./foram.ts"/>
 /// <reference path="./genotype_params.ts"/>
+/// <reference path="./foram.ts"/>
+/// <reference path="./simulation_gui.ts"/>
 /// <reference path="./controls/target_controls.ts"/>
 /// <reference path="./helpers/utils.ts"/>
 
@@ -217,53 +218,7 @@ module Foram3D {
     }
 
     private setupGUI() {
-      this.gui = new dat.GUI();
-
-      var genotypeFolder  = this.gui.addFolder("Genotype");
-      var structureFolder = this.gui.addFolder("Structure analyzer");
-      var materialFolder  = this.gui.addFolder("Material");
-
-      var genotype = {
-        phi:                 0.5,
-        beta:                0.5,
-        translationFactor:   0.5,
-        growthFactor:        1.1,
-        wallThicknessFactor: 1.1
-      };
-
-      var structureAnalyzer = {
-        numChambers:      20,
-        simulate:         () => this.simulate(genotype, structureAnalyzer.numChambers),
-        evolve:           () => this.evolve(),
-        regress:          () => this.regress(),
-        centroidsPath:    () => this.toggleCentroidsPath(),
-        aperturesPath:    () => this.toggleAperturesPath(),
-        thicknessVectors: () => this.toggleThicknessVectors(),
-        fitTarget:        () => this.fitTarget()
-      }
-
-      var materialOptions = {
-        opacity: 0.8
-      }
-
-      genotypeFolder.add(genotype, 'phi').step(0.01);
-      genotypeFolder.add(genotype, 'beta').step(0.01);
-      genotypeFolder.add(genotype, 'translationFactor').step(0.01);
-      genotypeFolder.add(genotype, 'growthFactor').step(0.01);
-      genotypeFolder.add(genotype, 'wallThicknessFactor').step(0.01);
-
-      structureFolder.add(structureAnalyzer, 'numChambers');
-      structureFolder.add(structureAnalyzer, 'simulate');
-      structureFolder.add(structureAnalyzer, 'evolve');
-      structureFolder.add(structureAnalyzer, 'regress');
-      structureFolder.add(structureAnalyzer, 'centroidsPath');
-      structureFolder.add(structureAnalyzer, 'aperturesPath');
-      structureFolder.add(structureAnalyzer, 'thicknessVectors');
-      structureFolder.add(structureAnalyzer, 'fitTarget');
-
-      materialFolder.add(materialOptions, 'opacity').onFinishChange(
-        () => this.applyOpacity(materialOptions.opacity)
-      );
+      this.gui = new SimulationGUI(this);
     }
 
     private onMouseClick(event) {
