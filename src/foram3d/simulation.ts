@@ -4,11 +4,16 @@
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
 /// <reference path="./controls/target_controls.ts"/>
+/// <reference path="./helpers/utils.ts"/>
 
 module Foram3D {
+  export interface SimulationParams {
+    dev?: boolean;
+  }
+
   export class Simulation {
     canvas: HTMLElement;
-    configuration: Configuration;
+    config: SimulationParams;
 
     private foram: Foram;
 
@@ -30,9 +35,15 @@ module Foram3D {
 
     private targetControls: Controls.TargetControls;
 
-    constructor(canvas: HTMLElement, configParams?: ConfigurationParams) {
+    private static DEFAULT_PARAMS: SimulationParams = {
+      dev: false
+    };
+
+    constructor(canvas: HTMLElement, params?: SimulationParams) {
+      this.config = {};
+      Helpers.extend(this.config, params, Simulation.DEFAULT_PARAMS);
+
       this.canvas = canvas;
-      this.configuration = new Configuration(configParams);
 
       this.thicknessVectorsVisible = false;
 
@@ -42,7 +53,7 @@ module Foram3D {
       this.setupMouseEvents();
       this.setupAutoResize();
 
-      if (this.configuration.dev) {
+      if (this.config.dev) {
         this.setupGUI();
       }
 
