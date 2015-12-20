@@ -15,8 +15,6 @@ module Foram3D {
 
     private foram: Foram;
 
-    private thicknessVectorsVisible: boolean;
-
     private _onChamberClick: (event: Event, chamber: ChamberParams) => void;
     private _onChamberHover: (event: Event, chamber: ChamberParams) => void;
 
@@ -39,8 +37,6 @@ module Foram3D {
       Helpers.extend(this.config, params, Simulation.DEFAULT_PARAMS);
 
       this.canvas = canvas;
-
-      this.thicknessVectorsVisible = false;
 
       this.setupScene();
       this.setupControls();
@@ -69,8 +65,6 @@ module Foram3D {
       if (!this.foram) return;
 
       this.foram.evolve();
-
-      this.updateThicknessVectors();
     }
 
     regress() {
@@ -109,29 +103,10 @@ module Foram3D {
       return this.foram.calculateShapeFactor();
     }
 
-    showThicknessVectors() {
-      if (!this.foram) return;
-
-      var chambers = this.foram.chambers;
-
-      for (var i = 0; i < chambers.length; i++) {
-        chambers[i].showThicknessVector();
-      }
-    }
-
-    hideThicknessVectors() {
-      if (!this.foram) return;
-
-      var chambers = this.foram.chambers;
-
-      for (var i = 0; i < chambers.length; i++) {
-        chambers[i].hideThicknessVector();
-      }
-    }
-
     toggleThicknessVectors() {
-      this.thicknessVectorsVisible = !this.thicknessVectorsVisible;
-      this.updateThicknessVectors();
+      if (!this.foram) return;
+
+      this.foram.toggleThicknessVectors();
     }
 
     toggleChambers() {
@@ -177,19 +152,9 @@ module Foram3D {
       this.targetControls.fitTarget(this.foram);
     }
 
-    private updateThicknessVectors() {
-      if (this.thicknessVectorsVisible) {
-        this.showThicknessVectors();
-      } else {
-        this.hideThicknessVectors();
-      }
-    }
-
     private reset() {
       if (this.foram)
         this.scene.remove(this.foram);
-
-      this.thicknessVectorsVisible = false;
 
       this.foram = null;
     }

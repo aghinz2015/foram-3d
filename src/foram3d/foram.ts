@@ -24,6 +24,8 @@ module Foram3D {
     private centroidsPath: ChamberPaths.CentroidsPath;
     private aperturesPath: ChamberPaths.AperturesPath;
 
+    private thicknessVectorsVisible: boolean;
+
     constructor(genotype: GenotypeParams, numChambers: number) {
       super();
 
@@ -39,6 +41,8 @@ module Foram3D {
       for (var i = 1; i < numChambers; i++) {
         this.evolve();
       }
+
+      this.thicknessVectorsVisible = false;
     }
 
     evolve() {
@@ -56,6 +60,7 @@ module Foram3D {
       }
 
       this.updateChamberPaths();
+      this.updateThicknessVectors();
     }
 
     regress() {
@@ -89,6 +94,23 @@ module Foram3D {
       }
 
       this.aperturesPath.visible = !this.aperturesPath.visible;
+    }
+
+    showThicknessVectors() {
+      for (let chamber of this.chambers) {
+        chamber.showThicknessVector();
+      }
+    }
+
+    hideThicknessVectors() {
+      for (let chamber of this.chambers) {
+        chamber.hideThicknessVector();
+      }
+    }
+
+    toggleThicknessVectors() {
+      this.thicknessVectorsVisible = !this.thicknessVectorsVisible;
+      this.updateThicknessVectors();
     }
 
     calculateSurfaceArea(): number {
@@ -281,6 +303,14 @@ module Foram3D {
 
       if (this.aperturesPath) {
         this.aperturesPath.rebuild()
+      }
+    }
+
+    private updateThicknessVectors() {
+      if (this.thicknessVectorsVisible) {
+        this.showThicknessVectors();
+      } else {
+        this.hideThicknessVectors();
       }
     }
   }
