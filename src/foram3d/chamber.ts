@@ -6,9 +6,17 @@ module Foram3D {
     thickness: number;
   }
 
+  export interface ChamberMaterialParams extends THREE.MeshLambertMaterialParameters {}
+
   export class Chamber extends THREE.Mesh {
     private static WIDTH_SEGMENTS:  number = 32;
     private static HEIGHT_SEGMENTS: number = 32;
+
+    private static MATERIAL_DEFAULTS: ChamberMaterialParams = {
+      color:       0xffffff,
+      transparent: true,
+      opacity:     0.8
+    };
 
     private static APERTURE_MARKER_COLOR:       number = 0x000000;
     private static APERTURE_MARKER_SIZE_FACTOR: number = 0.05;
@@ -78,6 +86,12 @@ module Foram3D {
       };
     }
 
+    applyMaterial(materialParams: ChamberMaterialParams) {
+      for (let param in materialParams) {
+        this.material[param] = materialParams[param];
+      }
+    }
+
     private buildApertureMarker() {
       var markerParams = {
         color: Chamber.APERTURE_MARKER_COLOR,
@@ -106,11 +120,7 @@ module Foram3D {
     }
 
     private buildMaterial(): THREE.Material {
-      return new THREE.MeshLambertMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.5
-      });
+      return new THREE.MeshLambertMaterial(Chamber.MATERIAL_DEFAULTS);
     }
 
     private buildThicknessVector(): THREE.ArrowHelper {

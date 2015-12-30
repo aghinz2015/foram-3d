@@ -11,12 +11,15 @@ module Foram3D {
   export class Foram extends THREE.Group {
     private static INITIAL_RADIUS:    number = 5;
     private static INITIAL_THICKNESS: number = 1;
-    private static INITIAL_OPACITY:   number = 0.8;
+
+    private static MATERIAL_DEFAULTS: ChamberMaterialParams = {
+      opacity: 0.8
+    };
 
     genotype: Genotype;
     chambers: Array<Chamber>;
 
-    material: THREE.Material;
+    material: ChamberMaterialParams;
 
     private currentChamber: Chamber;
     private prevChambers: Array<Chamber> = [];
@@ -30,7 +33,7 @@ module Foram3D {
       super();
 
       this.genotype = genotype;
-      this.material = this.buildMaterial();
+      this.material = Foram.MATERIAL_DEFAULTS;
 
       var initialChamber = this.buildInitialChamber();
 
@@ -128,6 +131,11 @@ module Foram3D {
       return calculator.calculate();
     }
 
+    applyOpacity(opacity: number) {
+      this.material.opacity = opacity;
+      this.updateChambersMaterial();
+    }
+
     getActiveChambers(): Array<Chamber> {
       var chamber, activeChambers = [];
 
@@ -136,10 +144,6 @@ module Foram3D {
       }
 
       return activeChambers;
-    }
-
-    applyOpacity(opacity: number) {
-      this.material.opacity = opacity;
     }
 
     private calculateNextChamber(): Chamber {
@@ -283,17 +287,9 @@ module Foram3D {
 
     private buildChamber(center: THREE.Vector3, radius: number, thickness: number) {
       var chamber = new Chamber(center, radius, thickness);
-      chamber.material = this.material;
+      chamber.applyMaterial(this.material);
 
       return chamber;
-    }
-
-    private buildMaterial(): THREE.Material {
-      return new THREE.MeshLambertMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: Foram.INITIAL_OPACITY
-      });
     }
 
     private updateChamberPaths() {
@@ -311,6 +307,12 @@ module Foram3D {
         this.showThicknessVectors();
       } else {
         this.hideThicknessVectors();
+      }
+    }
+
+    private updateChambersMaterial() {
+      for (let chamber of this.chambers) {
+        chamber.applyMaterial(this.material);
       }
     }
   }
