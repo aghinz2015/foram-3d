@@ -34,6 +34,7 @@
         "src/foram3d/export/exporter.ts",
         "src/foram3d/foram.ts",
         "src/foram3d/genotype.ts",
+        "src/foram3d/helpers/color_sequencer.ts",
         "src/foram3d/helpers/face.ts",
         "src/foram3d/helpers/line.ts",
         "src/foram3d/helpers/plane.ts",
