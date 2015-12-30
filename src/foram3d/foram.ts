@@ -29,11 +29,18 @@ module Foram3D {
 
     private thicknessVectorsVisible: boolean;
 
+    private colorSequencer: Helpers.ColorSequencer;
+
+    private isColored: boolean;
+
     constructor(genotype: Genotype, numChambers: number) {
       super();
 
       this.genotype = genotype;
       this.material = Foram.MATERIAL_DEFAULTS;
+
+      this.colorSequencer = new Helpers.ColorSequencer();
+      this.isColored = false;
 
       var initialChamber = this.buildInitialChamber();
 
@@ -134,6 +141,17 @@ module Foram3D {
     applyOpacity(opacity: number) {
       this.material.opacity = opacity;
       this.updateChambersMaterial();
+    }
+
+    colour(colors?: Array<number>) {
+      this.colorSequencer = new Helpers.ColorSequencer(colors);
+      this.updateChambersColors();
+      this.isColored = true;
+    }
+
+    decolour() {
+      this.resetChambersColors();
+      this.isColored = false;
     }
 
     getActiveChambers(): Array<Chamber> {
@@ -287,7 +305,12 @@ module Foram3D {
 
     private buildChamber(center: THREE.Vector3, radius: number, thickness: number) {
       var chamber = new Chamber(center, radius, thickness);
+
       chamber.applyMaterial(this.material);
+
+      if (this.isColored) {
+        chamber.setColor(this.colorSequencer.next());
+      }
 
       return chamber;
     }
@@ -313,6 +336,20 @@ module Foram3D {
     private updateChambersMaterial() {
       for (let chamber of this.chambers) {
         chamber.applyMaterial(this.material);
+      }
+    }
+
+    private updateChambersColors() {
+      this.colorSequencer.reset();
+
+      for (let chamber of this.chambers) {
+        chamber.setColor(this.colorSequencer.next());
+      }
+    }
+
+    private resetChambersColors() {
+      for (let chamber of this.chambers) {
+        chamber.resetColor();
       }
     }
   }

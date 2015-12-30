@@ -21,6 +21,8 @@ module Foram3D {
     private static APERTURE_MARKER_COLOR:       number = 0x000000;
     private static APERTURE_MARKER_SIZE_FACTOR: number = 0.05;
 
+    material: THREE.MeshLambertMaterial;
+
     center:   THREE.Vector3;
     origin:   THREE.Vector3;
     aperture: THREE.Vector3;
@@ -90,6 +92,14 @@ module Foram3D {
       for (let param in materialParams) {
         this.material[param] = materialParams[param];
       }
+    }
+
+    setColor(color: number) {
+      this.material.color.setHex(color);
+    }
+
+    resetColor() {
+      this.material.color.setHex(Chamber.MATERIAL_DEFAULTS.color);
     }
 
     private buildApertureMarker() {

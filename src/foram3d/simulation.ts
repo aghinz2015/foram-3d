@@ -116,6 +116,18 @@ module Foram3D {
       this.foram.applyOpacity(opacity);
     }
 
+    colour(colors?: Array<number>) {
+      if (!this.foram) return;
+
+      this.foram.colour(colors);
+    }
+
+    decolour() {
+      if (!this.foram) return;
+
+      this.foram.decolour();
+    }
+
     exportToOBJ(): string {
       if (!this.foram) return;
 

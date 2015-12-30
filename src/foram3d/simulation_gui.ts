@@ -34,7 +34,9 @@ module Foram3D {
       }
 
       var materialOptions = {
-        opacity: 0.8
+        opacity:  0.8,
+        colour:   () => this.simulation.colour(),
+        decolour: () => this.simulation.decolour()
       }
 
       genotypeFolder.add(genotype, 'phi').step(0.01);
@@ -55,6 +57,8 @@ module Foram3D {
       materialFolder.add(materialOptions, 'opacity').onFinishChange(
         () => this.simulation.applyOpacity(materialOptions.opacity)
       );
+      materialFolder.add(materialOptions, 'colour');
+      materialFolder.add(materialOptions, 'decolour');
     }
 
   }
