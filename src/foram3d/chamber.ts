@@ -95,11 +95,11 @@ module Foram3D {
     }
 
     setColor(color: number) {
-      this.material.color.setHex(color);
+      this.material.color.set(color);
     }
 
     resetColor() {
-      this.material.color.setHex(Chamber.MATERIAL_DEFAULTS.color);
+      this.material.color.set(Chamber.MATERIAL_DEFAULTS.color);
     }
 
     private buildApertureMarker() {
