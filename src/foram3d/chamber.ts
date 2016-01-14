@@ -2,8 +2,11 @@
 
 module Foram3D {
   export interface ChamberParams {
-    radius:    number;
-    thickness: number;
+    radius:         number;
+    thickness:      number;
+    surfaceArea:    number;
+    materialVolume: number;
+    volume:         number;
   }
 
   export interface ChamberMaterialParams extends THREE.MeshLambertMaterialParameters {}
@@ -114,8 +117,11 @@ module Foram3D {
 
     serialize(): ChamberParams {
       return {
-        radius:    this.radius,
-        thickness: this.thickness
+        radius:         this.radius,
+        thickness:      this.thickness,
+        surfaceArea:    this.getSurfaceArea(),
+        materialVolume: this.getMaterialVolume(),
+        volume:         this.getVolume()
       };
     }
 
