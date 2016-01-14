@@ -81,6 +81,11 @@ module Foram3D {
       this.add(this.apertureMarker);
     }
 
+    getSurfaceArea(): number {
+      var calculator = new Calculators.Chamber.SurfaceAreaCalculator(this);
+      return calculator.calculate();
+    }
+
     serialize(): ChamberParams {
       return {
         radius:    this.radius,
@@ -100,6 +105,29 @@ module Foram3D {
 
     resetColor() {
       this.material.color.set(Chamber.MATERIAL_DEFAULTS.color);
+    }
+
+    distanceTo(otherChamber: Chamber) {
+      return this.center.distanceTo(otherChamber.center);
+    }
+
+    intersects(otherChamber: Chamber) {
+      return this.distanceTo(otherChamber) < this.radius + otherChamber.radius;
+    }
+
+    getIntersectingChambers(): Array<Chamber> {
+      var intersectingChambers = [];
+      var ancestor = this.ancestor;
+
+      while (ancestor) {
+        if (ancestor.intersects(this)) {
+          intersectingChambers.push(ancestor);
+        }
+
+        ancestor = ancestor.ancestor;
+      }
+
+      return intersectingChambers;
     }
 
     private buildApertureMarker() {
