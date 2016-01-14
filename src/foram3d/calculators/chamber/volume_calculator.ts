@@ -55,7 +55,7 @@ module Foram3D.Calculators.Chamber {
 
       return result;
     }
-    
+
     private calculateFaceVolume(face: Helpers.Face): number {
       var v321, v231, v312, v132, v213, v123;
 

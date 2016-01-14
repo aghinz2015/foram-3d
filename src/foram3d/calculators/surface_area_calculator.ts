@@ -1,5 +1,4 @@
 /// <reference path="./calculator.ts" />
-/// <reference path="./faces_processor.ts" />
 
 module Foram3D.Calculators {
   export class SurfaceAreaCalculator extends Calculator {
