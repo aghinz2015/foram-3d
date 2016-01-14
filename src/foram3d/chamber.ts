@@ -32,6 +32,7 @@ module Foram3D {
 
     surfaceArea:    number;
     materialVolume: number;
+    volume:         number;
 
     ancestor: Chamber;
     child:    Chamber;
@@ -100,6 +101,15 @@ module Foram3D {
       }
 
       return this.materialVolume;
+    }
+
+    getVolume(): number {
+      if (!this.volume) {
+        var calculator = new Calculators.Chamber.VolumeCalculator(this);
+        this.volume = calculator.calculate();
+      }
+
+      return this.volume;
     }
 
     serialize(): ChamberParams {
