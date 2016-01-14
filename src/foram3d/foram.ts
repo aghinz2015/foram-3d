@@ -4,6 +4,7 @@
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
 /// <reference path="./calculators/surface_area_calculator.ts"/>
+/// <reference path="./calculators/material_volume_calculator.ts"/>
 /// <reference path="./calculators/volume_calculator.ts"/>
 /// <reference path="./calculators/shape_factor_calculator.ts"/>
 

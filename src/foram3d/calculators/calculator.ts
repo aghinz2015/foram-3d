@@ -9,5 +9,15 @@ module Foram3D {
     }
 
     abstract calculate(): number;
+
+    protected sumChambers(calculateChamberMorphometric: (chamber: Chamber) => number): number {
+      var result = 0;
+
+      for (let chamber of this.foram.getActiveChambers()) {
+        result += calculateChamberMorphometric(chamber);
+      }
+
+      return result;
+    }
   }
 }
