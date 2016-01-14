@@ -3,7 +3,7 @@
 /// <reference path="./genotype.ts"/>
 /// <reference path="./chamber_paths/centroids_path.ts"/>
 /// <reference path="./chamber_paths/apertures_path.ts"/>
-/// <reference path="./calculators/surface_calculator.ts"/>
+/// <reference path="./calculators/surface_area_calculator.ts"/>
 /// <reference path="./calculators/volume_calculator.ts"/>
 /// <reference path="./calculators/shape_factor_calculator.ts"/>
 
@@ -124,7 +124,7 @@ module Foram3D {
     }
 
     calculateSurfaceArea(): number {
-      var calculator = new Calculators.SurfaceCalculator(this);
+      var calculator = new Calculators.SurfaceAreaCalculator(this);
       return calculator.calculate();
     }
 
