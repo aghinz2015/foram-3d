@@ -133,6 +133,11 @@ module Foram3D {
       return calculator.calculate();
     }
 
+    calculateMaterialVolume(): number {
+      var calculator = new Calculators.MaterialVolumeCalculator(this);
+      return calculator.calculate();
+    }
+
     calculateShapeFactor(): number {
       var calculator = new Calculators.ShapeFactorCalculator(this);
       return calculator.calculate();
