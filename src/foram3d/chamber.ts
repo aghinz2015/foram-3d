@@ -30,6 +30,9 @@ module Foram3D {
     radius:    number;
     thickness: number;
 
+    surfaceArea:    number;
+    materialVolume: number;
+
     ancestor: Chamber;
     child:    Chamber;
 
@@ -82,8 +85,21 @@ module Foram3D {
     }
 
     getSurfaceArea(): number {
-      var calculator = new Calculators.Chamber.SurfaceAreaCalculator(this);
-      return calculator.calculate();
+      if (!this.surfaceArea) {
+        var calculator = new Calculators.Chamber.SurfaceAreaCalculator(this);
+        this.surfaceArea = calculator.calculate();
+      }
+
+      return this.surfaceArea;
+    }
+
+    getMaterialVolume(): number {
+      if (!this.materialVolume) {
+        var calculator = new Calculators.Chamber.MaterialVolumeCalculator(this);
+        this.materialVolume = calculator.calculate();
+      }
+
+      return this.materialVolume;
     }
 
     serialize(): ChamberParams {

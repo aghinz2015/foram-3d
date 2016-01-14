@@ -22,6 +22,7 @@
     "files": [
         "src/foram3d/calculators/calculator.ts",
         "src/foram3d/calculators/chamber/calculator.ts",
+        "src/foram3d/calculators/chamber/material_volume_calculator.ts",
         "src/foram3d/calculators/chamber/surface_area_calculator.ts",
         "src/foram3d/calculators/faces_processor.ts",
         "src/foram3d/calculators/shape_factor_calculator.ts",
